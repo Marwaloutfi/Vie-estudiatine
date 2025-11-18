@@ -1,48 +1,57 @@
 // server.js
 
+// 1. IMPORTATION DES MODULES
 const express = require('express');
 const nodemailer = require('nodemailer');
-const cors = require('cors'); // Pour permettre à votre front-end de communiquer avec le backend
+const cors = require('cors'); 
 const app = express();
-const PORT = 3000; // Le port de votre serveur backend
+const PORT = 3000; 
 
-// --- CONFIGURATION ---
+// --- 2. CONFIGURATION DES MIDDLEWARES ---
 
-// 1. Configuration du Middleware
-// Permet de recevoir des données JSON dans le corps de la requête
+// Middleware pour autoriser toutes les requêtes du frontend
+app.use(cors({
+    origin: '*', // Autoriser toutes les origines (pour le développement local et le déploiement simple)
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
+// Middleware pour analyser le corps des requêtes en JSON
 app.use(express.json()); 
-// Permet d'autoriser les requêtes depuis votre front-end (si différent du port 3000)
-app.use(cors());
+app.use(express.urlencoded({ extended: true })); 
 
-// 2. Configuration de Nodemailer (Email Sender)
-// REMPLACEZ ces informations par les vôtres.
-// Exemple pour Gmail :
+// --- 3. CONFIGURATION DE NODEMAILER ---
+
+// Configuration de Nodemailer (Email Sender)
+// 🚨 REMPLACEZ LES PLACEHOLDERS CI-DESSOUS PAR VOS VRAIS IDENTIFIANTS 🚨
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'marwaloutfi2006@gmail.com', // Votre adresse email
-        pass: 'MaRwA@2006' // Votre mot de passe OU mot de passe d'application (fortement recommandé pour Gmail)
+        // 📧 L'email qui envoie le message (votre adresse Gmail)
+        user: 'VOTRE_EMAIL_GMAIL@gmail.com', 
+        
+        // 🔑 Le Mot de passe d'Application (généré dans les paramètres Google)
+        pass: 'VOTRE_MOT_DE_PASSE_OU_APPLICATION_PASSWORD' 
     }
 });
 
-// --- ROUTES DU SERVEUR ---
+// --- 4. ROUTES DU SERVEUR ---
 
 /**
- * Route POST pour gérer le formulaire de contact (#contactForm).
- * Envoie un email à l'équipe BDE.
+ * Route POST pour gérer le formulaire de contact (envoi d'email).
+ * Endpoint : /api/contact
  */
 app.post('/api/contact', async (req, res) => {
     const { name, email, message } = req.body;
 
-    // Validation basique
     if (!name || !email || !message) {
-        return res.status(400).json({ success: false, message: 'Veuillez remplir tous les champs.' });
+        return res.status(400).json({ success: false, message: 'Veuillez remplir tous les champs du formulaire de contact.' });
     }
 
-    // Contenu de l'email
     const mailOptions = {
-        from: email, // L'email de l'expéditeur
-        to: 'marwaloutfi2006@gmail.com', // L'adresse email de réception du BDE
+        from: `"${name}" <${email}>`, 
+        // 📧 L'adresse email du BDE qui reçoit le message
+        to: 'contact.bde.emsi@gmail.com', 
         subject: `[BDE CONTACT] Nouveau message de ${name}`,
         html: `
             <h3>Nouveau Message de Contact</h3>
@@ -50,52 +59,48 @@ app.post('/api/contact', async (req, res) => {
             <p><strong>Email:</strong> ${email}</p>
             <hr>
             <p><strong>Message:</strong></p>
-            <p>${message}</p>
+            <p style="white-space: pre-wrap;">${message}</p>
         `
     };
 
     try {
         await transporter.sendMail(mailOptions);
         console.log(`Email de contact envoyé par ${name} (${email})`);
-        // Répondre avec succès au front-end
         res.status(200).json({ success: true, message: 'Votre message a été envoyé avec succès !' });
     } catch (error) {
-        console.error('Erreur lors de l\'envoi de l\'email :', error);
-        res.status(500).json({ success: false, message: 'Erreur lors de l\'envoi du message.' });
+        console.error('Erreur lors de l\'envoi de l\'email :', error.message);
+        res.status(500).json({ success: false, message: `Erreur lors de l\'envoi du message. Vérifiez l\'authentification Nodemailer. Détail: ${error.message}` });
     }
 });
 
 
 /**
- * Route POST pour gérer les inscriptions aux événements.
- * Ceci est une simulation : dans un vrai système, vous ajouteriez ceci à une base de données.
+ * Route POST pour gérer les inscriptions aux événements (simulation).
+ * Endpoint : /api/inscription
  */
 app.post('/api/inscription', (req, res) => {
     const { eventName, studentName, studentEmail } = req.body;
     
-    // Simuler l'enregistrement dans une "base de données" (un tableau en mémoire ici)
-    const newRegistration = {
-        id: Date.now(), // ID unique (timestamp)
-        eventName,
-        studentName,
-        studentEmail,
-        date: new Date().toISOString()
-    };
+    if (!eventName || !studentName || !studentEmail) {
+        return res.status(400).json({ success: false, message: 'Données d\'inscription manquantes.' });
+    }
     
-    // Dans un vrai projet, vous feriez : db.collection('inscriptions').insertOne(newRegistration);
-    console.log('✅ Nouvelle inscription reçue pour :', eventName, newRegistration);
+    // Log l'inscription dans la console du serveur pour la démonstration
+    console.log('--- Nouvelle inscription reçue ---');
+    console.log('Événement:', eventName);
+    console.log('Étudiant:', studentName);
+    console.log('Email:', studentEmail);
+    console.log('------------------------------------');
     
-    // Envoi d'une confirmation de succès
     res.status(200).json({ 
         success: true, 
-        message: `Inscription à l'événement "${eventName}" réussie !`,
-        registration: newRegistration
+        message: `Inscription à l'événement "${eventName}" enregistrée (vérifiez la console du serveur).`
     });
 });
 
 
-// Démarrage du serveur
+// --- 5. DÉMARRAGE DU SERVEUR ---
+
 app.listen(PORT, () => {
     console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);
-    console.log('Attention : N\'oubliez pas de configurer les identifiants Nodemailer !');
 });

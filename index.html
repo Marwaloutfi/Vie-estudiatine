@@ -1,740 +1,446 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>BDE EMSI Rabat | Événements & Infos Étudiantes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <meta name="description" content="BDE EMSI Rabat — événements, informations et contact" />
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDE EMSI - Rabat</title>
     <style>
-        
-        :root{
-            --green: #007b43;
-            --green-light: #00a651;
-            --gray-light: #f5f7fa;
-            --gray-dark: #2c2c2c;
-            --white: #ffffff;
-            --transition: 200ms ease; /* Consistent transition duration */
-            --max-width: 1200px;
+        /* CSS Inclus pour la Simplicité */
+        :root {
+            --primary-color: #004a99; /* Bleu EMSI */
+            --secondary-color: #f7b731; /* Jaune/Orange */
+            --text-color: #333;
+            --light-bg: #f4f4f4;
+            --white: #fff;
         }
 
-        /* Base Resets and Setup */
-        *{box-sizing:border-box}
-        html,body{height:100%}
-        body{
-            margin:0;
-            font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-            color:var(--gray-dark);
-            background:var(--gray-light);
-            -webkit-font-smoothing:antialiased;
-            -moz-osx-font-smoothing:grayscale;
-        }
-        html{scroll-behavior:smooth}
-
-        .container{
-            width:calc(100% - 32px);
-            max-width:var(--max-width);
-            margin:0 auto;
-        }
-        /* Utility Class */
-        .center{display:flex;align-items:center;justify-content:center}
-        .mt-8{margin-top:8px}
-
-        /* Header Styles */
-        .header{
-            position:fixed;
-            top:0;
-            left:0;
-            right:0;
-            height:64px;
-            background:linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-            border-bottom:1px solid rgba(44,44,44,0.04);
-            z-index:1000;
-            display:flex;
-            align-items:center;
-            box-shadow:0 2px 8px rgba(15,15,15,0.04);
-        }
-        .header .container{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-        }
-        .logo{
-            display:flex;
-            gap:40px;
-            align-items:center;
-        }
-        /* NOTE: Adjusted image styling for better display in header */
-        .logo img{height:50px; width: auto;} 
-        .brand{
-            font-weight:700;
-            color:var(--green);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Navigation */
-        .nav{
-            display:flex;
-            gap:18px;
-            align-items:center;
-        }
-        .nav a{
-            color:var(--gray-dark);
-            text-decoration:none;
-            font-weight:500;
-            padding:8px 10px;
-            border-radius:8px;
-            transition:background var(--transition), color var(--transition); 
-        }
-        .nav a:hover{background:rgba(0,0,0,0.04)}
-        .btn-logout{
-            background:var(--green);
-            color:var(--white);
-            padding:8px 14px;
-            border-radius:8px;
-            border:none;
-            cursor:pointer;
-            transition:background var(--transition); 
-        }
-        .btn-logout:hover{
-            background: var(--green-light); 
+        body {
+            font-family: 'Arial', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
 
-        /* Mobile Toggle */
-        .nav-toggle{
-            display:none;
-            background:none;
-            border:none;
-            font-size:24px;
-            cursor:pointer;
-            color:var(--gray-dark);
-        }
-        
-        @media (max-width: 768px){
-            .nav-toggle{display:block}
-            .nav{
-                display:none; 
-                flex-direction:column;
-                position:absolute;
-                top:64px; 
-                right:0;
-                width:200px;
-                background:var(--white);
-                border-left:1px solid rgba(44,44,44,0.04);
-                box-shadow:-2px 4px 8px rgba(15,15,15,0.08);
-                padding:15px;
-            }
-            /* Show the menu when the .nav-open class is present (toggled by JS) */
-            .nav.nav-open{display:flex} 
-            .nav a, .nav .btn-logout{
-                width:100%;
-                text-align:left;
-            }
+        header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Hero Section */
-        .hero{
-            min-height:100vh;
-            display:flex;
-            align-items:center;
-            color:var(--white);
-            position:relative;
-            padding-top:64px;
-        }
-        .hero::before{
-            content:"";
-            position:absolute; inset:0;
-            background:linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.6) 100%);
-            z-index:0;
-        }
-        .hero .bg{
-            position:absolute; inset:0;
-            /* REMPLACEZ PAR UNE URL PUBLIQUE OU UN CHEMIN RELATIF */
-            background-image: url(https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp);
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-        .hero-inner{
-            position:relative; z-index:1;
-            padding:80px 16px;
-        }
-        .hero h1{
-            font-size:clamp(28px, 4vw, 46px);
-            margin:0 0 16px 0;
-        }
-        .hero p.lead{
-            max-width:900px; margin:0 0 24px 0; font-size:1.05rem; color:rgba(255,255,255,0.95);
-        }
-        .counters{
-            display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:12px; margin-top:18px; max-width:980px;
-        }
-        .counter{
-            background:rgba(255,255,255,0.06);
-            padding:12px 14px; border-radius:10px; text-align:center;
-        }
-        .counter .num{font-weight:700; font-size:1.2rem}
-        .counter .label{font-size:0.85rem; color:rgba(255,255,255,0.85)}
-        .btn-hero{
-            padding:10px 12px;
-            border-radius:10px;
-            border:none;
-            cursor:pointer;
-            transition:transform var(--transition); 
-        }
-        .btn-hero:hover{
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
         }
 
-        /* Section and Headers */
-        .section{padding:64px 0}
-        .section .section-header{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;align-items:center;text-align:center}
-        .section h2{margin:0;font-size:1.6rem}
-        .section p.subtitle{margin:0;color:#556;}
-
-        /* Card Grid Layouts */
-        .cards-grid{
-            display:grid; gap:18px;
-        }
-        @media (max-width:767px){.cards-grid{grid-template-columns:1fr}}
-        @media (min-width:768px) and (max-width:1023px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
-        @media (min-width:1024px){.cards-grid{grid-template-columns:repeat(4,1fr)}}
-
-        /* Base Card Styling */
-        .card{
-            background:var(--white);
-            border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(15,15,15,0.06);
-            display:flex; flex-direction:column;
-            transition:transform var(--transition), box-shadow var(--transition); 
-        }
-        .card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 10px 25px rgba(15,15,15,0.1);
-        }
-        /* REMPLACEZ PAR DES CHEMINS D'IMAGES VALIDES */
-        .card img{width:100%; height:160px; object-fit:cover} 
-        .card-body{padding:14px; display:flex; flex-direction:column; gap:8px; flex:1}
-        .badge{display:inline-block;background:var(--green);color:var(--white);padding:6px 8px;border-radius:999px;font-weight:600;font-size:0.85rem}
-        .card .meta{font-size:0.9rem;color:#444;}
-        .card .actions{margin-top:auto;display:flex;gap:8px}
-        .btn{
-            padding:8px 10px;
-            border-radius:8px;
-            border:none;
-            cursor:pointer;
-            transition:background var(--transition), color var(--transition); 
-        }
-        .btn-primary{background:var(--green);color:var(--white)}
-        .btn-primary:hover{background:var(--green-light)} 
-        .btn-muted{background:#eef2f4;color:#333}
-        .btn-muted:hover{background:#dbe0e3} 
-
-        /* Card Media/Visuals */
-        .card-media{position:relative}
-        .card-media img{display:block;height:200px;object-fit:cover;width:100%}
-        .badge-top{position:absolute;left:12px;top:12px;background:var(--white);color:var(--gray-dark);padding:8px 12px;border-radius:999px;font-weight:700;font-size:0.85rem;box-shadow:0 6px 18px rgba(15,15,15,0.08)}
-        .badge-top.pale{background:#fff1f8;color:#9b59b6}
-        .price-bubble{position:absolute;right:12px;top:12px;padding:10px 12px;border-radius:999px;color:#fff;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,0.12)}
-        .price-bubble.green{background:var(--green)}
-        .price-bubble.purple{background:#9b59b6}
-        .price-bubble.orange{background:#ff9b28}
-        .price-bubble.red{background:#ff4d4d}
-
-        .card.highlight{
-            border:3px solid rgba(45,118,255,0.95);
-            box-shadow:0 18px 40px rgba(34,60,80,0.06)
-        }
-
-        .card-body h3{margin:0;font-size:1.05rem}
-        .card-body .meta-desc{color:#556;margin:6px 0 8px 0}
-        .meta-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-        .meta-item{display:flex;align-items:center;gap:10px;color:#5b6b73;font-size:0.95rem}
-        .meta-item .icon{display:inline-block;width:26px;height:26px;border-radius:6px;background:#f1f6f5;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px}
-
-        .actions{margin-top:12px}
-        .link-profile{
-            display:inline-block;
-            margin-top:12px;
-            color:#1976d2;
-            text-decoration:none;
-            font-weight:600;
-            transition:text-decoration var(--transition); 
-        }
-        .link-profile:hover{text-decoration:underline}
-
-
-        /* Info List */
-        .info-list{display:flex;flex-direction:column;gap:12px}
-        .info-card{
-            display:flex;
-            gap:12px;
-            align-items:center;
-            background:var(--white);
-            padding:12px;
-            border-radius:10px;
-            box-shadow:0 6px 18px rgba(15,15,15,0.04);
-            transition:transform var(--transition), box-shadow var(--transition); 
-        }
-        .info-card:hover{
-            transform:scale(1.01);
-            box-shadow:0 8px 20px rgba(15,15,15,0.08);
-        }
-        .info-card .info-left{flex:0 0 110px}
-        .info-card .info-main{flex:1}
-        .info-badge{display:inline-block;padding:6px 10px;border-radius:8px;font-weight:700;color:var(--white)}
-        .info-badge.urgent{background:#d9534f}
-        .info-badge.event{background:var(--green)}
-        .info-badge.info{background:#6c757d}
-
-        /* Important Grid */
-        .important-grid{display:grid;gap:18px}
-        @media (max-width:767px){.important-grid{grid-template-columns:1fr}}
-        @media (min-width:768px) and (max-width:1023px){.important-grid{grid-template-columns:repeat(2,1fr)}}
-        @media (min-width:1024px){.important-grid{grid-template-columns:repeat(4,1fr)}}
-        /* Hero icons below counters */
-        .hero-icons {
+        nav {
             display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 20px;
-            z-index: 2;
-            position: relative;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .hero-icon img {
-            width: 60px;
-            height: 60px;
-            transition: transform 0.35s, filter 0.35s, box-shadow 0.35s;
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav ul li {
+            margin-left: 20px;
+        }
+
+        .nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: color 0.3s;
+        }
+
+        .nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Mobile Menu */
+        .nav-toggle {
+            display: none;
             cursor: pointer;
-            /* No shadow by default */
-            filter: none;
+            font-size: 2rem;
         }
 
-        .hero-icon img:hover {
-            transform: scale(1.2);
-            /* Green shadow only on hover */
-            filter: drop-shadow(0 0 15px #00FF99);
+        @media (max-width: 768px) {
+            .nav ul {
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background: var(--primary-color);
+                width: 100%;
+                text-align: center;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .nav-open ul {
+                transform: translateY(0);
+            }
+
+            .nav ul li {
+                margin: 0;
+                padding: 10px 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
         }
 
-        .important-card{
-            background:var(--white);
-            border-radius:12px;
-            padding:18px;
-            box-shadow:0 12px 30px rgba(15,15,15,0.06);
-            display:flex;
-            flex-direction:column;
-            gap:12px;
-            min-height:140px;
-            position:relative;
-            transition:transform var(--transition), box-shadow var(--transition);
-        }
-        .important-card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 18px 40px rgba(15,15,15,0.1);
+        /* Sections communes */
+        section {
+            padding: 60px 0;
         }
 
-        .important-card .card-top{display:flex;align-items:center;justify-content:space-between}
-        .card-icon{width:36px;height:36px;border-radius:10px;background:#f3f6f7;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
-        .pill{padding:6px 10px;border-radius:999px;font-weight:700;font-size:0.8rem;color:#fff}
-        .pill.event{background:var(--green)}
-        .pill.urgent{background:#d9534f}
-        .pill.info{background:#6c757d}
-
-        .card-date{font-weight:600;color:#222;margin-bottom:6px}
-        .important-card h4{margin:0;font-size:1.05rem}
-        .muted{color:#6b7280;margin:0}
-
-        /* Team Grid */
-        .team-grid{display:grid;gap:16px}
-        @media (max-width:767px){.team-grid{grid-template-columns:1fr}}
-        @media (min-width:768px) and (max-width:1023px){.team-grid{grid-template-columns:repeat(2,1fr)}}
-        @media (min-width:1024px){.team-grid{grid-template-columns:repeat(5,1fr)}}
-        .team-card{
-            background:var(--white);
-            padding:12px;
-            border-radius:10px;
-            text-align:center;
-            box-shadow:0 6px 18px rgba(15,15,15,0.04);
-            transition:transform var(--transition), box-shadow var(--transition);
-        }
-        .team-card:hover{
-            transform:translateY(-6px);
-            box-shadow:0 10px 25px rgba(15,15,15,0.1);
-        }
-        /* REMPLACEZ PAR DES CHEMINS D'IMAGES VALIDES */
-        .team-card img{width:88px;height:88px;border-radius:50%;object-fit:cover;margin:0 auto 10px;}
-        .team-card h4{margin:0 0 6px 0}
-        .team-card p{margin:0;color:#555}
-
-        /* Form Styling */
-        .form{background:var(--white);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(15,15,15,0.04)}
-        .form .row{display:flex;gap:8px}
-        @media (max-width:767px){.form .row{flex-direction:column}}
-        .input, textarea{
-            width:100%;
-            padding:10px;
-            border-radius:8px;
-            border:1px solid #e6e9eb;
-            transition:border-color var(--transition); 
-        }
-        .input:focus, textarea:focus {
-            border-color: var(--green);
-            outline: none; 
-        }
-        .btn-send{
-            background:var(--green-light);
-            color:var(--white);
-            border:none;
-            padding:10px 14px;
-            border-radius:8px;
-            cursor:pointer;
-            transition:background var(--transition); 
-        }
-        .btn-send:hover{
-            background:var(--green); 
-        }
-        @media (max-width:767px){
-            .contact-grid-wrapper{grid-template-columns:1fr !important;}
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
+        /* Hero */
+        #hero {
+            background: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        #hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        #hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-hero {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-hero:hover {
+            background: #ffc85a;
+        }
+
+        /* Stats */
+        #stats {
+            background: var(--light-bg);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .counter {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .counter .num {
+            font-size: 3rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .counter p {
+            margin-top: 10px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Events */
+        #events {
+            background: var(--white);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+            flex-grow: 1; /* Permet aux cartes d'avoir la même hauteur */
+        }
+
+        .card .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .card .btn-primary:hover {
+            background: #003a7a;
+        }
+
+        /* Contact */
+        #contact {
+            background: var(--light-bg);
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .contact-form .btn-send {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .contact-form .btn-send:hover {
+            background: #ffc85a;
+        }
+        
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
         /* Footer */
-        .footer{padding:28px 0;text-align:center;color:#666}
+        footer {
+            background: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
 
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="logo" aria-label="BDE EMSI Rabat logo">
-                <img src="https://via.placeholder.com/50x50?text=Logo" alt="Logo du BDE EMSI" />
-                <span class="brand">BDE EMSI Rabat</span>
-            </div>
 
+    <header>
+        <div class="container">
             <nav>
-                <button class="nav-toggle" aria-label="Ouvrir le menu">
-                    <i class="fas fa-bars"></i> </button>
-                <div class="nav" role="navigation">
-                    <a href="#hero" data-scroll>Accueil</a>
-                    <a href="#events" data-scroll>Événements</a>
-                    <a href="#info" data-scroll>Informations</a>
-                    <a href="#team" data-scroll>Équipe</a>
-                    <a href="#contact" data-scroll>Contact</a>
-                    <button class="btn-logout">Se déconnecter</button>
+                <div class="logo">
+                    <h1>BDE EMSI</h1>
                 </div>
+                <div class="nav">
+                    <ul>
+                        <li><a href="#hero" data-scroll>Accueil</a></li>
+                        <li><a href="#about" data-scroll>À Propos</a></li>
+                        <li><a href="#events" data-scroll>Événements</a></li>
+                        <li><a href="#contact" data-scroll>Contact</a></li>
+                    </ul>
+                </div>
+                <div class="nav-toggle">☰</div>
             </nav>
         </div>
     </header>
 
-    <section id="hero" class="hero">
-        <div class="bg" aria-hidden="true"></div>
-        <div class="container hero-inner">
-            <h1 class="text-6xl md:text-7xl font-bold text-white mb-6">
-                Bienvenue au Bureau des étudiants
-                <span class="text-blue-400 block">EMSI Rabat</span>
-            </h1>
+    <section id="hero">
+        <div class="container">
+            <h2>Votre Vie Étudiante, Notre Priorité</h2>
+            <p>Le Bureau Des Étudiants de l'EMSI Rabat vous connecte aux événements, clubs et services essentiels.</p>
+            <a href="#events" class="btn-hero" data-scroll>Voir les Événements</a>
+        </div>
+    </section>
 
-            <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto lead">
-                Une nouvelle année commence ! Découvrez tous les événements,
-                activités et services organisés par votre BDE pour une rentrée
-                inoubliable.
+    <section id="stats">
+        <div class="container">
+            <h2 class="section-title">Notre Impact en Chiffres</h2>
+            <div class="stats-grid">
+                <div class="counter">
+                    <div class="num" data-target="1500">0</div>
+                    <p>Étudiants actifs</p>
+                </div>
+                <div class="counter">
+                    <div class="num" data-target="45">0</div>
+                    <p>Événements organisés</p>
+                </div>
+                <div class="counter">
+                    <div class="num" data-target="12">0</div>
+                    <p>Clubs et Associations</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Qui Sommes-Nous ?</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto;">
+                Le BDE est le cœur de la vie parascolaire à l'EMSI Rabat. Notre mission est de représenter les étudiants, 
+                d'organiser des événements mémorables (culturels, sportifs, humanitaires) et de veiller à ce que chaque étudiant(e) 
+                trouve sa place et s'épanouisse durant son parcours d'ingénieur.
             </p>
-            <div class="counters" aria-label="Statistiques de l'école">
-                <div class="counter">
-                    <div class="num" data-target="14500">0</div>
-                    <div class="label">Étudiants</div>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="20">0</div>
-                    <div class="label">Événements</div>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="10">0</div>
-                    <div class="label">Associations</div>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="39">0</div>
-                    <div class="label">Ans d’excellence</div>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="5">0</div>
-                    <div class="label">Villes</div>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="20000">0</div>
-                    <div class="label">Lauréats</div>
-                </div>
-            </div>
-            <div class="hero-icons">
-                <a href="#events" class="hero-icon"><img src="https://via.placeholder.com/60x60?text=E" alt="Icon Événements"></a>
-                <a href="#info" class="hero-icon"><img src="https://via.placeholder.com/60x60?text=I" alt="Icon Infos"></a>
-                <a href="#team" class="hero-icon"><img src="https://via.placeholder.com/60x60?text=T" alt="Icon Team"></a>
-                <a href="#contact" class="hero-icon"><img src="https://via.placeholder.com/60x60?text=C" alt="Icon Contact"></a>
-            </div>
-
         </div>
     </section>
 
-    <section id="events" class="section">
+    <section id="events">
         <div class="container">
-            <div class="section-header">
-                <h2>Événements à venir</h2>
-                <p class="subtitle">Découvrez les événements organisés par votre BDE pour une rentrée mémorable et enrichissante</p>
-            </div>
-
+            <h2 class="section-title">Prochains Événements</h2>
             <div class="cards-grid">
-                <article class="card highlight" aria-labelledby="ev1">
-                    <div class="card-media">
-                        <img src="https://via.placeholder.com/400x200?text=Journee+Integration" alt="Photo de groupe lors d'une journée d'intégration" />
-                        <div class="badge-top">Événement Phare</div>
-                        <div class="price-bubble green">Gratuit</div>
-                    </div>
-                    <div class="card-body">
-                        <h3 id="ev1">Journée d'Intégration</h3>
-                        <p class="meta-desc">Découvrez l'école et créez des liens durables avec vos futurs camarades.</p>
-
-                        <ul class="meta-list">
-                            <li class="meta-item"><span class="icon cal">📅</span> 3-4 Sept</li>
-                            <li class="meta-item"><span class="icon clock">⏰</span> 9h00 - 18h00</li>
-                            <li class="meta-item"><span class="icon loc">📍</span> Campus + Parc Villette</li>
-                            <li class="meta-item"><span class="icon people">👥</span> 200+ participants</li>
-                        </ul>
-
-                        <div class="actions">
-                            <button class="btn btn-primary" data-event-name="Journée d'Intégration">S'inscrire maintenant</button>
-                        </div>
-
-                        <a class="link-profile" href="#" aria-label="Voir le profil LinkedIn">Voir le profil LinkedIn</a>
-                    </div>
-                </article>
-
-                <article class="card" aria-labelledby="ev2">
-                    <div class="card-media">
-                         <img src="https://via.placeholder.com/400x200?text=Soiree+Bienvenue" alt="Ambiance de fête lors d'une soirée de bienvenue" />
-                        <div class="badge-top pale">Soirée</div>
-                        <div class="price-bubble purple">15€</div>
-                    </div>
-                    <div class="card-body">
-                        <h3 id="ev2">Soirée de Bienvenue BDE</h3>
-                        <p class="meta-desc">Soirée festive avec DJ, buffet et animations pour célébrer la rentrée.</p>
-
-                        <ul class="meta-list">
-                            <li class="meta-item"><span class="icon cal">📅</span> 15 Sept</li>
-                            <li class="meta-item"><span class="icon clock">⏰</span> 19h00 - 02h00</li>
-                            <li class="meta-item"><span class="icon loc">📍</span> Salle des Fêtes</li>
-                            <li class="meta-item"><span class="icon people">👥</span> 150 participants</li>
-                        </ul>
-
-                        <div class="actions">
-                            <button class="btn btn-muted" disabled aria-disabled="true">Bientôt disponible</button>
-                        </div>
-
-                        <a class="link-profile" href="#">Voir le profil LinkedIn</a>
-                    </div>
-                </article>
-
-                <article class="card" aria-labelledby="ev3">
-                    <div class="card-media">
-                         <img src="https://via.placeholder.com/400x200?text=Workshop+Tech" alt="Étudiants participant à un atelier de codage" />
-                        <div class="badge-top">Atelier</div>
-                        <div class="price-bubble green">10€</div>
-                    </div>
-                    <div class="card-body">
-                        <h3 id="ev3">Workshop Tech</h3>
-                        <p class="meta-desc">Ateliers pratiques sur les technologies émergentes et l'innovation.</p>
-
-                        <ul class="meta-list">
-                            <li class="meta-item"><span class="icon cal">📅</span> 22 Sept</li>
-                            <li class="meta-item"><span class="icon clock">⏰</span> 14h00 - 17h00</li>
-                            <li class="meta-item"><span class="icon loc">📍</span> Labo Informatique</li>
-                            <li class="meta-item"><span class="icon people">👥</span> 30 participants</li>
-                        </ul>
-
-                        <div class="actions">
-                            <button class="btn btn-primary" data-event-name="Workshop Tech">S'inscrire maintenant</button>
-                        </div>
-
-                        <a class="link-profile" href="#">Voir le profil LinkedIn</a>
-                    </div>
-                </article>
-
-                <article class="card" aria-labelledby="ev4">
-                    <div class="card-media">
-                         <img src="https://via.placeholder.com/400x200?text=Tournoi+Sportif" alt="Équipe de sport universitaire jouant sur le terrain" />
-                        <div class="badge-top">Compétition</div>
-                        <div class="price-bubble orange">5€</div>
-                    </div>
-                    <div class="card-body">
-                        <h3 id="ev4">Tournoi Sportif</h3>
-                        <p class="meta-desc">Compétitions sportives inter-promotions avec récompenses.</p>
-
-                        <ul class="meta-list">
-                            <li class="meta-item"><span class="icon cal">📅</span> 29 Sept</li>
-                            <li class="meta-item"><span class="icon clock">⏰</span> 10h00 - 16h00</li>
-                            <li class="meta-item"><span class="icon loc">📍</span> Terrain de Sport</li>
-                            <li class="meta-item"><span class="icon people">👥</span> 100 participants</li>
-                        </ul>
-
-                        <div class="actions">
-                            <button class="btn btn-hero" style="background:linear-gradient(90deg,#ff7a00,#ff4d4d);color:#fff" data-event-name="Tournoi Sportif">S'inscrire maintenant</button>
-                        </div>
-
-                        <a class="link-profile" href="#">Voir le profil LinkedIn</a>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section id="info" class="section" style="background:transparent;">
-        <div class="container">
-            <div class="section-header">
-                <h2>Informations importantes</h2>
-                <p class="subtitle">Toutes les dates clés à retenir pour bien démarrer votre année</p>
-            </div>
-
-            <div class="important-grid">
-                <article class="important-card" aria-labelledby="info1">
-                    <div class="card-top">
-                        <span class="card-icon" aria-hidden>📅</span>
-                        <span class="pill urgent">Urgent</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-date">2 Septembre 2025</div>
-                        <h4 id="info1">Jour de rentrée</h4>
-                        <p class="muted">Jour de rentrée</p>
-                    </div>
-                </article>
-
-                <article class="important-card" aria-labelledby="info2">
-                    <div class="card-top">
-                        <span class="card-icon" aria-hidden>👥</span>
-                        <span class="pill event">Événement</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-date">3–4 Septembre</div>
-                        <h4 id="info2">Journées d'intégration</h4>
-                        <p class="muted">Rencontres, activités et ateliers pour débuter.</p>
-                    </div>
-                </article>
-
-                <article class="important-card" aria-labelledby="info3">
-                    <div class="card-top">
-                        <span class="card-icon" aria-hidden>⏰</span>
-                        <span class="pill info">Info</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-date">9 Septembre</div>
-                        <h4 id="info3">Début des cours</h4>
-                        <p class="muted">Assurez-vous d'avoir tout le matériel nécessaire.</p>
-                    </div>
-                </article>
-
-                <article class="important-card" aria-labelledby="info4">
-                    <div class="card-top">
-                        <span class="card-icon" aria-hidden>📍</span>
-                        <span class="pill event">Événement</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-date">15 Septembre</div>
-                        <h4 id="info4">Soirée de bienvenue BDE</h4>
-                        <p class="muted">Soirée officielle du BDE — réservez votre place.</p>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section id="team" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2>L’équipe BDE 2026</h2>
-                <p class="subtitle">Une équipe passionnée pour votre année étudiante</p>
-            </div>
-
-            <div class="team-grid">
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=A" alt="Photo du Président" /><h4>Adam EL MEHDI</h4><p>Président — Génie Informatique, 5ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=I" alt="Photo de la Vice-Présidente" /><h4>Imane LAHRACH</h4><p>Vice-Présidente — Génie Logiciel, 4ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=K" alt="Photo du Responsable Événementiel" /><h4>Khalid ZIYAD</h4><p>Responsable Événementiel — SI, 4ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=S" alt="Photo du Responsable Communication" /><h4>Salma FILALI</h4><p>Responsable Communication — Réseaux, 3ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=O" alt="Photo du Trésorier" /><h4>Omar BENANI</h4><p>Trésorier — IS, 5ème année</p></div>
-
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=Y" alt="Photo du Responsable Partenariats" /><h4>Yassine EL MAHDI</h4><p>Responsable Partenariats — Génie Logiciel, 4ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=F" alt="Photo du Responsable Logistique" /><h4>Fatima ZAHRA</h4><p>Responsable Logistique — SI, 5ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=A" alt="Photo du Responsable Culture" /><h4>Amina IDRISSI</h4><p>Responsable Culture — Réseaux, 3ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=N" alt="Photo du Responsable Sport" /><h4>Nabil KHALIFA</h4><p>Responsable Sport — IS, 4ème année</p></div>
-                <div class="team-card"><img src="https://via.placeholder.com/88x88?text=L" alt="Photo du Responsable Social" /><h4>Leila CHERKAOUI</h4><p>Responsable Social — Génie Informatique, 3ème année</p></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Contact</h2>
-                <p class="subtitle">Écrivez-nous pour toute question ou suggestion</p>
-            </div>
-
-            <div class="contact-grid-wrapper" style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
-                <form id="contactForm" class="form" aria-label="Formulaire de contact">
-                    <div class="row" style="margin-bottom:8px">
-                        <input class="input" name="name" placeholder="Nom" required />
-                        <input class="input" name="email" placeholder="Email" type="email" required />
-                    </div>
-                    <div style="margin-bottom:8px">
-                        <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn-send">Envoyer</button>
-                    </div>
-                </form>
-
-                <div class="info-list">
-                    <div class="info-card">
-                        <div class="info-left">
-                            <div class="info-badge event">Président</div>
-                        </div>
-                        <div class="info-main">
-                            <strong>Adam EL MEHDI</strong><br>
-                            <span style="font-size:0.9rem;color:#555">adam.elh@emsi.ma</span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-left">
-                            <div class="info-badge info">Téléphone</div>
-                        </div>
-                        <div class="info-main">
-                            <strong>+212 5 37 77 00 00</strong><br>
-                            <span style="font-size:0.9rem;color:#555">Disponible du Lundi au Vendredi</span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-left">
-                            <div class="info-badge urgent">Adresse</div>
-                        </div>
-                        <div class="info-main">
-                            <strong>EMSI Rabat</strong><br>
-                            <span style="font-size:0.9rem;color:#555">Avenue Al Majd, Hay Riad, Rabat</span>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>Journée d'Intégration</h3>
+                    <p>Découvrez la vie du campus, rencontrez vos camarades et les membres du BDE. Repas et activités inclus.</p>
+                    <p>📍 Campus EMSI | 📅 1er Octobre</p>
+                    <button class="btn-primary" data-event-name="Journée d'Intégration">S'inscrire</button>
+                </div>
+                <div class="card">
+                    <h3>Tournoi de Football</h3>
+                    <p>Inscrivez votre équipe pour le grand tournoi annuel. Des prix incroyables à gagner !</p>
+                    <p>📍 Terrain de foot | 📅 15 Octobre</p>
+                    <button class="btn-primary" data-event-name="Tournoi de Football">S'inscrire</button>
+                </div>
+                <div class="card">
+                    <h3>Nuit du Talent</h3>
+                    <p>Exprimez-vous ! Musique, théâtre, poésie, stand-up. Révélez vos talents cachés.</p>
+                    <p>📍 Amphithéâtre | 📅 5 Novembre</p>
+                    <button class="btn-primary" data-event-name="Nuit du Talent">S'inscrire</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
+    <section id="contact">
         <div class="container">
-            <p>&copy; 2025 BDE EMSI Rabat. Tous droits réservés. Propulsé par la communauté étudiante.</p>
+            <h2 class="section-title">Contactez le BDE</h2>
+            <form id="contactForm" class="contact-form">
+                <label for="name">Nom & Prénom</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email EMSI</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Votre Message / Question</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit" class="btn-send">Envoyer le Message</button>
+            </form>
+            <div class="contact-info">
+                 <p>📍 Adresse : 1, Avenue Al Majd, Hay Riad, Rabat</p>
+                 <p>📧 Email de réception : contact.bde.emsi@gmail.com</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 BDE EMSI Rabat. Tous droits réservés.</p>
         </div>
     </footer>
 
     <script>
-        // *** CONFIGURATION : Assurez-vous que le port correspond à votre serveur Node.js ***
+        // *****************************************************************
+        // *** CONFIGURATION : API URL ***
+        // *** IMPORTANT : LORS DU DÉPLOIEMENT EN LIGNE (RENDER, HEROKU), 
+        // *** REMPLACEZ 'http://localhost:3000' PAR L'URL DE VOTRE SERVEUR !
+        // *****************************************************************
         const API_URL = 'http://localhost:3000/api'; 
+        // Exemple de déploiement : const API_URL = 'https://mon-serveur-bde.onrender.com/api';
         // ---------------------------------------------------------------------------------
+
 
         // Fonction utilitaire pour le défilement fluide
         document.querySelectorAll('a[data-scroll]').forEach(anchor => {
@@ -764,7 +470,7 @@
         // ---------------------------------------------
         function animateCounter(element, target) {
             let count = 0;
-            const step = target / 100; // Prendre 100 étapes
+            const step = target / 100; 
             const increment = Math.ceil(step);
             
             const timer = setInterval(() => {
@@ -773,24 +479,23 @@
                     count = target;
                     clearInterval(timer);
                 }
-                element.textContent = count.toLocaleString('fr-FR'); // Formatage avec séparateur de milliers
+                element.textContent = count.toLocaleString('fr-FR'); 
             }, 10);
         }
 
         const counters = document.querySelectorAll('.counter .num');
         
-        // Utiliser l'Intersection Observer API pour lancer l'animation quand visible
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const counterElement = entry.target;
                     const target = parseInt(counterElement.getAttribute('data-target'));
                     animateCounter(counterElement, target);
-                    observer.unobserve(counterElement); // Arrêter l'observation après l'animation
+                    observer.unobserve(counterElement); 
                 }
             });
         }, {
-            threshold: 0.8 // Déclenchement à 80% de visibilité
+            threshold: 0.8 
         });
 
         counters.forEach(counter => {
@@ -806,14 +511,12 @@
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                // Récupération des données
                 const formData = new FormData(contactForm);
                 const data = Object.fromEntries(formData.entries());
                 
                 const btnSend = contactForm.querySelector('.btn-send');
                 const originalText = btnSend.textContent;
                 
-                // Afficher le chargement
                 btnSend.textContent = 'Envoi en cours...';
                 btnSend.disabled = true;
 
@@ -832,7 +535,6 @@
                         alert(`✅ Succès: ${result.message}`);
                         contactForm.reset();
                     } else {
-                        // Gérer les erreurs 400/500 du serveur
                         alert(`❌ Erreur: ${result.message || 'Problème de communication avec le serveur.'}`);
                     }
 
@@ -840,7 +542,6 @@
                     console.error('Erreur de connexion au serveur :', error);
                     alert('❌ Erreur de connexion: Assurez-vous que le serveur backend Node.js est en cours d\'exécution sur http://localhost:3000.');
                 } finally {
-                    // Rétablir le bouton
                     btnSend.textContent = originalText;
                     btnSend.disabled = false;
                 }
@@ -850,15 +551,13 @@
         // ---------------------------------------------
         // ## 4. Inscription aux Événements
         // ---------------------------------------------
-        document.querySelectorAll('#events .cards-grid .btn-primary, #events .cards-grid .btn-hero').forEach(button => {
+        document.querySelectorAll('#events .cards-grid .btn-primary').forEach(button => {
             button.addEventListener('click', async (e) => {
                 
-                // Empêcher le comportement par défaut (si le bouton était un lien)
                 e.preventDefault(); 
                 
                 const eventName = e.target.getAttribute('data-event-name');
                 
-                // Demander les informations de l'étudiant via prompt (simulation)
                 const studentName = prompt(`Inscription à l'événement "${eventName}" :\nVeuillez entrer votre Nom et Prénom :`);
                 if (!studentName) return; 
 
@@ -901,7 +600,7 @@
                 }
             });
         });
-
     </script>
 </body>
 </html>
+

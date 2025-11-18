@@ -1,106 +1,107 @@
 // server.js
-
-// 1. IMPORTATION DES MODULES
 const express = require('express');
 const nodemailer = require('nodemailer');
-const cors = require('cors'); 
+const cors = require('cors');
+const path = require('path');
+
 const app = express();
-const PORT = 3000; 
+const PORT = 3000;
+// server.js (before line 92)
 
-// --- 2. CONFIGURATION DES MIDDLEWARES ---
+// 1. Get the 'config' module (assuming your config file exports it)
+const config = require('./path/to/your/config');
+// OR, if you're using a package like 'config'
+// const config = require('config');
+// === DONNÉES SIMULÉES ===
+const registeredUsers = [];       // { name, email, promotion, password }
+const eventRegistrations = [];    // { eventName, name, email, promotion, timestamp }
 
-// Middleware pour autoriser toutes les requêtes du frontend
-app.use(cors({
-    origin: '*', // Autoriser toutes les origines (pour le développement local et le déploiement simple)
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-}));
+// === MIDDLEWARE ===
+app.use(express.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public'))); // Assurez-vous que votre frontend est dans /public
 
-// Middleware pour analyser le corps des requêtes en JSON
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); 
-
-// --- 3. CONFIGURATION DE NODEMAILER ---
-
-// Configuration de Nodemailer (Email Sender)
-// 🚨 REMPLACEZ LES PLACEHOLDERS CI-DESSOUS PAR VOS VRAIS IDENTIFIANTS 🚨
+// === NODEMAILER CONFIGURATION ===
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        // 📧 L'email qui envoie le message (votre adresse Gmail)
-        user: 'VOTRE_EMAIL_GMAIL@gmail.com', 
-        
-        // 🔑 Le Mot de passe d'Application (généré dans les paramètres Google)
-        pass: 'VOTRE_MOT_DE_PASSE_OU_APPLICATION_PASSWORD' 
+        user: 'marghwaloutfi@gmail.com', // Ton email Gmail
+        pass: 'jfqd smtz pxby zjkk'      // Mot de passe d'application Gmail
     }
 });
 
-// --- 4. ROUTES DU SERVEUR ---
+// === ROUTES AUTHENTIFICATION ===
 
-/**
- * Route POST pour gérer le formulaire de contact (envoi d'email).
- * Endpoint : /api/contact
- */
+// Créer un compte
+app.post('/api/create-account', (req, res) => {
+    const { name, email, promotion, password } = req.body;
+    if (!name || !email || !promotion || !password) {
+        return res.status(400).json({ success: false, error: 'Veuillez remplir tous les champs.' });
+    }
+    if (!email.endsWith('@emsi.ma')) {
+        return res.status(400).json({ success: false, error: 'Email EMSI requis.' });
+    }
+    if (registeredUsers.find(u => u.email === email)) {
+        return res.status(409).json({ success: false, error: 'Email déjà enregistré.' });
+    }
+    registeredUsers.push({ name, email, promotion, password });
+    res.status(201).json({ success: true, message: `Bienvenue ${name} ! Compte créé.` });
+});
+
+// Connexion
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
+    const user = registeredUsers.find(u => u.email === email && u.password === password);
+    if (!user) return res.status(401).json({ success: false, error: 'Email ou mot de passe incorrect.' });
+    res.json({ success: true, message: `Connexion réussie ! Bienvenue ${user.name}.` });
+});
+
+// === ROUTES ÉVÉNEMENTS ===
+
+// Inscription à un événement
+app.post('/api/register-event', (req, res) => {
+    const { eventName, name, email, promotion } = req.body;
+    if (!eventName || !name || !email || !promotion) return res.status(400).json({ success: false, error: 'Tous les champs requis.' });
+
+    if (eventRegistrations.find(e => e.email === email && e.eventName === eventName)) {
+        return res.status(409).json({ success: false, error: `Déjà inscrit à ${eventName}.` });
+    }
+
+    eventRegistrations.push({ eventName, name, email, promotion, timestamp: new Date().toISOString() });
+    res.json({ success: true, message: `Inscription à ${eventName} réussie !` });
+});
+
+// === FORMULAIRE DE CONTACT ===
 app.post('/api/contact', async (req, res) => {
     const { name, email, message } = req.body;
-
-    if (!name || !email || !message) {
-        return res.status(400).json({ success: false, message: 'Veuillez remplir tous les champs du formulaire de contact.' });
-    }
-
-    const mailOptions = {
-        from: `"${name}" <${email}>`, 
-        // 📧 L'adresse email du BDE qui reçoit le message
-        to: 'contact.bde.emsi@gmail.com', 
-        subject: `[BDE CONTACT] Nouveau message de ${name}`,
-        html: `
-            <h3>Nouveau Message de Contact</h3>
-            <p><strong>Nom:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <hr>
-            <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap;">${message}</p>
-        `
-    };
+    if (!name || !email || !message) return res.status(400).json({ success: false, error: 'Tous les champs requis.' });
 
     try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Email de contact envoyé par ${name} (${email})`);
-        res.status(200).json({ success: true, message: 'Votre message a été envoyé avec succès !' });
-    } catch (error) {
-        console.error('Erreur lors de l\'envoi de l\'email :', error.message);
-        res.status(500).json({ success: false, message: `Erreur lors de l\'envoi du message. Vérifiez l\'authentification Nodemailer. Détail: ${error.message}` });
+        await transporter.sendMail({
+            from: `"${name}" <${email}>`,
+            to: 'marghwaloutfi@gmail.com', 
+            subject: `Message BDE EMSI de ${name}`,
+            html: `<p>${message}</p><p>De : ${email}</p>`
+        });
+        res.json({ success: true, message: 'Message envoyé avec succès !' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, error: 'Erreur lors de l’envoi du message.' });
     }
 });
 
-
-/**
- * Route POST pour gérer les inscriptions aux événements (simulation).
- * Endpoint : /api/inscription
- */
-app.post('/api/inscription', (req, res) => {
-    const { eventName, studentName, studentEmail } = req.body;
-    
-    if (!eventName || !studentName || !studentEmail) {
-        return res.status(400).json({ success: false, message: 'Données d\'inscription manquantes.' });
-    }
-    
-    // Log l'inscription dans la console du serveur pour la démonstration
-    console.log('--- Nouvelle inscription reçue ---');
-    console.log('Événement:', eventName);
-    console.log('Étudiant:', studentName);
-    console.log('Email:', studentEmail);
-    console.log('------------------------------------');
-    
-    res.status(200).json({ 
-        success: true, 
-        message: `Inscription à l'événement "${eventName}" enregistrée (vérifiez la console du serveur).`
-    });
+// === SERVIR LE FRONTEND ===
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
-
-// --- 5. DÉMARRAGE DU SERVEUR ---
-
+if (config.isSimulationMode) {
+    console.log("C'est envoyé");
+    return true; // Return success status immediately
+} else {
+    // **Actual logic to call the external service goes here**
+    externalService.send(data);
+}
+// === LANCEMENT DU SERVEUR ===
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);
+    console.log(`🚀 Serveur démarré sur http://localhost:${3000}`);
 });

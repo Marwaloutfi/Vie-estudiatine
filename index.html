@@ -1,606 +1,806 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDE EMSI - Rabat</title>
-    <style>
-        /* CSS Inclus pour la Simplicité */
-        :root {
-            --primary-color: #004a99; /* Bleu EMSI */
-            --secondary-color: #f7b731; /* Jaune/Orange */
-            --text-color: #333;
-            --light-bg: #f4f4f4;
-            --white: #fff;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BDE EMSI Rabat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="BDE EMSI Rabat — événements, informations et contact" />
+  <style>
+    :root {
+      --green: #007b43;
+      --green-light: #00a651;
+      --gray-light: #f5f7fa;
+      --gray-dark: #2c2c2c;
+      --white: #ffffff;
+      --transition: 200ms ease;
+      --max-width: 1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color:var(--gray-dark);
+      background:var(--gray-light);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .container{
+      width:calc(100% - 32px);
+      max-width:var(--max-width);
+      margin:0 auto;
+    }
+    .header{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      height:64px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      border-bottom:1px solid rgba(44,44,44,0.04);
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      box-shadow:0 2px 8px rgba(15,15,15,0.04);
+    }
+    .header .container{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .logo{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .logo img{height:40px}
+    .nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+    .nav a{
+      color:var(--gray-dark);
+      text-decoration:none;
+      font-weight:500;
+      padding:8px 10px;
+      border-radius:8px;
+      transition:background var(--transition), color var(--transition);
+    }
+    .nav a:hover{background:rgba(0,0,0,0.04)}
+    .btn-logout{
+      background:var(--green);
+      color:var(--white);
+      padding:8px 14px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+    }
+    .nav-toggle{display:none}
+    @media (max-width: 768px){
+      .nav{display:none}
+      .nav-toggle{display:block}
+    }
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      color:var(--white);
+      position:relative;
+      padding-top:64px;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.6) 100%);
+      z-index:0;
+    }
+    .hero .bg{
+      position:absolute; inset:0;
+      background-image: url('https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+    .hero-inner{
+      position:relative; z-index:1;
+      padding:80px 16px;
+    }
+    .hero h1{
+      font-size:clamp(28px, 4vw, 46px);
+      margin:0 0 16px 0;
+    }
+    .hero p.lead{
+      max-width:900px; margin:0 0 24px 0; font-size:1.05rem; color:rgba(255,255,255,0.95);
+    }
+    .counters{
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:12px; margin-top:18px; max-width:980px;
+    }
+    .counter{
+      background:rgba(255,255,255,0.06);
+      padding:12px 14px; border-radius:10px; text-align:center;
+    }
+    .counter .num{font-weight:700; font-size:1.2rem}
+    .counter .label{font-size:0.85rem; color:rgba(255,255,255,0.85)}
+    .section{padding:64px 0}
+    .section .section-header{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;align-items:center;text-align:center}
+    .section h2{margin:0;font-size:1.6rem}
+    .section p.subtitle{margin:0;color:#556;}
+    .cards-grid{
+      display:grid; gap:18px;
+    }
+    @media (max-width:767px){.cards-grid{grid-template-columns:1fr}}
+    @media (min-width:768px) and (max-width:1023px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (min-width:1024px){.cards-grid{grid-template-columns:repeat(4,1fr)}}
+    .card{
+      background:var(--white);
+      border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(15,15,15,0.06);
+      display:flex; flex-direction:column;
+    }
+    .card img{width:100%; height:160px; object-fit:cover}
+    .card-body{padding:14px; display:flex; flex-direction:column; gap:8px; flex:1}
+    .card .actions{margin-top:auto;display:flex;gap:8px}
+    .btn{padding:8px 10px;border-radius:8px;border:none;cursor:pointer}
+    .btn-primary{background:var(--green);color:var(--white)}
+    .btn-muted{background:#eef2f4;color:#333}
+    .card-media{position:relative}
+    .card-media img{display:block;height:200px;object-fit:cover;width:100%}
+    .badge-top{position:absolute;left:12px;top:12px;background:var(--white);color:var(--gray-dark);padding:8px 12px;border-radius:999px;font-weight:700;font-size:0.85rem;box-shadow:0 6px 18px rgba(15,15,15,0.08)}
+    .badge-top.pale{background:#fff1f8;color:#9b59b6}
+    .price-bubble{position:absolute;right:12px;top:12px;padding:10px 12px;border-radius:999px;color:#fff;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,0.12)}
+    .price-bubble.green{background:var(--green)}
+    .price-bubble.purple{background:#9b59b6}
+    .price-bubble.orange{background:#ff9b28}
+    .card.highlight{border:3px solid rgba(45,118,255,0.95);box-shadow:0 18px 40px rgba(34,60,80,0.06)}
+    .card-body h3{margin:0;font-size:1.05rem}
+    .card-body .meta-desc{color:#556;margin:6px 0 8px 0}
+    .meta-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+    .meta-item{display:flex;align-items:center;gap:10px;color:#5b6b73;font-size:0.95rem}
+    .meta-item .icon{display:inline-block;width:26px;height:26px;border-radius:6px;background:#f1f6f5;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px}
+    .actions{margin-top:12px}
+    .link-profile{display:inline-block;margin-top:12px;color:#1976d2;text-decoration:none;font-weight:600}
+    .link-profile:hover{text-decoration:underline}
+    .btn-hero{padding:10px 12px;border-radius:10px;border:none;cursor:pointer; transition: opacity var(--transition);}
+    .btn-hero:hover{opacity:0.9}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .important-grid{display:grid;gap:18px}
+    @media (max-width:767px){.important-grid{grid-template-columns:1fr}}
+    @media (min-width:768px) and (max-width:1023px){.important-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (min-width:1024px){.important-grid{grid-template-columns:repeat(4,1fr)}}
+    .important-card{background:var(--white);border-radius:12px;padding:18px;box-shadow:0 12px 30px rgba(15,15,15,0.06);display:flex;flex-direction:column;gap:12px;min-height:140px;position:relative}
+    .important-card .card-top{display:flex;align-items:center;justify-content:space-between}
+    .card-icon{width:36px;height:36px;border-radius:10px;background:#f3f6f7;display:inline-flex;align-items:center;justify-content:center;font-size:18px}
+    .pill{padding:6px 10px;border-radius:999px;font-weight:700;font-size:0.8rem;color:#fff}
+    .pill.event{background:var(--green)}
+    .pill.urgent{background:#d9534f}
+    .pill.info{background:#6c757d}
+    .card-date{font-weight:600;color:#222;margin-bottom:6px}
+    .important-card h4{margin:0;font-size:1.05rem}
+    .muted{color:#6b7280;margin:0}
+    .important-card:hover{transform:translateY(-6px);transition:transform var(--transition)}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            color: var(--text-color);
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
-
-        header {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            color: var(--secondary-color);
-        }
-
-        .nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        .nav ul li {
-            margin-left: 20px;
-        }
-
-        .nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: bold;
-            padding: 5px 10px;
-            transition: color 0.3s;
-        }
-
-        .nav ul li a:hover {
-            color: var(--secondary-color);
-        }
-
-        /* Mobile Menu */
-        .nav-toggle {
-            display: none;
-            cursor: pointer;
-            font-size: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .nav ul {
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                right: 0;
-                background: var(--primary-color);
-                width: 100%;
-                text-align: center;
-                transform: translateY(-100%);
-                transition: transform 0.3s ease-in-out;
-            }
-
-            .nav-open ul {
-                transform: translateY(0);
-            }
-
-            .nav ul li {
-                margin: 0;
-                padding: 10px 0;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-        }
-
-        /* Sections communes */
-        section {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        /* Hero */
-        #hero {
-            background: var(--primary-color);
-            color: var(--white);
-            text-align: center;
-            padding: 100px 0;
-        }
-
-        #hero h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--secondary-color);
-        }
-
-        #hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-
-        .btn-hero {
-            background: var(--secondary-color);
-            color: var(--primary-color);
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .btn-hero:hover {
-            background: #ffc85a;
-        }
-
-        /* Stats */
-        #stats {
-            background: var(--light-bg);
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .counter {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .counter .num {
-            font-size: 3rem;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .counter p {
-            margin-top: 10px;
-            color: var(--text-color);
-            font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Events */
-        #events {
-            background: var(--white);
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--light-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            margin-bottom: 15px;
-            flex-grow: 1; /* Permet aux cartes d'avoir la même hauteur */
-        }
-
-        .card .btn-primary {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-            transition: background-color 0.3s;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .card .btn-primary:hover {
-            background: #003a7a;
-        }
-
-        /* Contact */
-        #contact {
-            background: var(--light-bg);
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .contact-form input[type="text"],
-        .contact-form input[type="email"],
-        .contact-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        .contact-form .btn-send {
-            background: var(--secondary-color);
-            color: var(--primary-color);
-            padding: 15px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-
-        .contact-form .btn-send:hover {
-            background: #ffc85a;
-        }
-        
-        .contact-info {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--primary-color);
-            color: var(--white);
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-    </style>
+    .team-grid{display:grid;gap:16px}
+    @media (max-width:767px){.team-grid{grid-template-columns:1fr}}
+    @media (min-width:768px) and (max-width:1023px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (min-width:1024px){.team-grid{grid-template-columns:repeat(5,1fr)}}
+    .team-card{background:var(--white);padding:12px;border-radius:10px;text-align:center;box-shadow:0 6px 18px rgba(15,15,15,0.04)}
+    .team-card img{width:88px;height:88px;border-radius:50%;object-fit:cover;margin:0 auto 10px;}
+    .team-card h4{margin:0 0 6px 0}
+    .team-card p{margin:0;color:#555}
+    .form{background:var(--white);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(15,15,15,0.04)}
+    .form .row{display:flex;gap:8px}
+    @media (max-width:767px){.form .row{flex-direction:column}}
+    .input, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9eb}
+    .btn-send{background:var(--green-light);color:var(--white);border:none;padding:10px 14px;border-radius:8px; cursor:pointer;}
+    .footer{padding:28px 0;text-align:center;color:#666}
+    html{scroll-behavior:smooth}
+    .card:hover{transform:translateY(-6px);transition:transform var(--transition)}
+    .team-card:hover{transform:translateY(-6px);transition:transform var(--transition)}
+    /* Styles pour le modale d'authentification */
+    #authForm {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        z-index: 2000;
+        max-width: 360px;
+        width: 90%;
+    }
+    #authForm input {
+        margin-bottom: 10px;
+        padding: 10px;
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+    #authForm button {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color var(--transition);
+    }
+    #authForm #submitAuth {
+        background: var(--green);
+        color: var(--white);
+    }
+    #authForm #submitAuth:hover {
+        background: var(--green-light);
+    }
+    #authForm .btn-muted {
+        background: #eef2f4;
+        color: #333;
+        margin-top: 8px;
+    }
+  </style>
 </head>
 <body>
+  <header class="header">
+    <div class="container">
+      <div class="logo" aria-label="BDE EMSI Rabat logo">
+        <img src="assets/logo-bde.png" alt="EMSI logo placeholder" />
+      </div>
 
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <h1>BDE EMSI</h1>
-                </div>
-                <div class="nav">
-                    <ul>
-                        <li><a href="#hero" data-scroll>Accueil</a></li>
-                        <li><a href="#about" data-scroll>À Propos</a></li>
-                        <li><a href="#events" data-scroll>Événements</a></li>
-                        <li><a href="#contact" data-scroll>Contact</a></li>
-                    </ul>
-                </div>
-                <div class="nav-toggle">☰</div>
-            </nav>
+      <nav>
+        <button class="nav-toggle" aria-label="Ouvrir le menu">☰</button>
+        <div class="nav" role="navigation">
+          <a href="#hero" data-scroll>Accueil</a>
+          <a href="#events" data-scroll>Événements</a>
+          <a href="#info" data-scroll>Informations</a>
+          <a href="#team" data-scroll>Équipe</a>
+          <a href="#contact" data-scroll>Contact</a>
+          <button id="btn-logout" class="btn-logout" style="display:none;">Se déconnecter</button>
+          <button id="btn-login" class="btn-hero btn-primary">Se connecter</button>
+          <button id="btn-register" class="btn-hero btn-primary" style="background:linear-gradient(90deg,#1976d2,#4fc3f7);color:#fff;">S'inscrire</button>
         </div>
-    </header>
+      </nav>
+    </div>
+  </header>
 
-    <section id="hero">
-        <div class="container">
-            <h2>Votre Vie Étudiante, Notre Priorité</h2>
-            <p>Le Bureau Des Étudiants de l'EMSI Rabat vous connecte aux événements, clubs et services essentiels.</p>
-            <a href="#events" class="btn-hero" data-scroll>Voir les Événements</a>
+  <section id="hero" class="hero">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <h1 class="text-6xl md:text-7xl font-bold text-white mb-6">
+          Bienvenue au Bureau des étudiants
+          <span style="color:#4fc3f7;" class="block">EMSI Rabat</span>
+        </h1>
+
+        <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+          Une nouvelle année commence ! Découvrez tous les événements,
+          activités et services organisés par votre BDE pour une rentrée
+          inoubliable.
+        </p>
+      <div class="counters" aria-hidden="false">
+        <div class="counter">
+          <div class="num" data-target="14500">0</div>
+          <div class="label">Étudiants</div>
         </div>
-    </section>
+        <div class="counter">
+          <div class="num" data-target="20">0</div>
+          <div class="label">Événements</div>
+        </div>
+        <div class="counter">
+          <div class="num" data-target="10">0</div>
+          <div class="label">Associations</div>
+        </div>
+        <div class="counter">
+          <div class="num" data-target="39">0</div>
+          <div class="label">Ans d’excellence</div>
+        </div>
+        <div class="counter">
+          <div class="num" data-target="5">0</div>
+          <div class="label">Villes</div>
+        </div>
+        <div class="counter">
+          <div class="num" data-target="20000">0</div>
+          <div class="label">Lauréats</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="stats">
-        <div class="container">
-            <h2 class="section-title">Notre Impact en Chiffres</h2>
-            <div class="stats-grid">
-                <div class="counter">
-                    <div class="num" data-target="1500">0</div>
-                    <p>Étudiants actifs</p>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="45">0</div>
-                    <p>Événements organisés</p>
-                </div>
-                <div class="counter">
-                    <div class="num" data-target="12">0</div>
-                    <p>Clubs et Associations</p>
-                </div>
+  <section id="events" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Événements à venir</h2>
+        <p class="subtitle">Découvrez les événements organisés par votre BDE pour une rentrée mémorable et enrichissante</p>
+      </div>
+
+      <div class="cards-grid">
+        <article class="card highlight" aria-labelledby="ev1">
+          <div class="card-media">
+            <img src="assets/IMG_9719.jpg" alt="Soirée d'intégration" />
+            <div class="badge-top">Événement Phare</div>
+            <div class="price-bubble green">Gratuit</div>
+          </div>
+          <div class="card-body">
+            <h3 id="ev1">Journée d'Intégration</h3>
+            <p class="meta-desc">Découvrez l'école et créez des liens durables avec vos futurs camarades.</p>
+
+            <ul class="meta-list">
+              <li class="meta-item"><span class="icon cal" aria-hidden>📅</span> 3-4 Sept</li>
+              <li class="meta-item"><span class="icon clock" aria-hidden>⏰</span> 9h00 - 18h00</li>
+              <li class="meta-item"><span class="icon loc" aria-hidden>📍</span> Campus + Parc Villette</li>
+              <li class="meta-item"><span class="icon people" aria-hidden>👥</span> 200+ participants</li>
+            </ul>
+
+            <div class="actions">
+              <button class="btn btn-primary">S'inscrire maintenant</button>
             </div>
-        </div>
-    </section>
 
-    <section id="about">
-        <div class="container">
-            <h2 class="section-title">Qui Sommes-Nous ?</h2>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto;">
-                Le BDE est le cœur de la vie parascolaire à l'EMSI Rabat. Notre mission est de représenter les étudiants, 
-                d'organiser des événements mémorables (culturels, sportifs, humanitaires) et de veiller à ce que chaque étudiant(e) 
-                trouve sa place et s'épanouisse durant son parcours d'ingénieur.
-            </p>
-        </div>
-    </section>
+            <a class="link-profile" href="#" aria-label="Voir le profil LinkedIn">Voir le profil LinkedIn</a>
+          </div>
+        </article>
 
-    <section id="events">
-        <div class="container">
-            <h2 class="section-title">Prochains Événements</h2>
-            <div class="cards-grid">
-                <div class="card">
-                    <h3>Journée d'Intégration</h3>
-                    <p>Découvrez la vie du campus, rencontrez vos camarades et les membres du BDE. Repas et activités inclus.</p>
-                    <p>📍 Campus EMSI | 📅 1er Octobre</p>
-                    <button class="btn-primary" data-event-name="Journée d'Intégration">S'inscrire</button>
-                </div>
-                <div class="card">
-                    <h3>Tournoi de Football</h3>
-                    <p>Inscrivez votre équipe pour le grand tournoi annuel. Des prix incroyables à gagner !</p>
-                    <p>📍 Terrain de foot | 📅 15 Octobre</p>
-                    <button class="btn-primary" data-event-name="Tournoi de Football">S'inscrire</button>
-                </div>
-                <div class="card">
-                    <h3>Nuit du Talent</h3>
-                    <p>Exprimez-vous ! Musique, théâtre, poésie, stand-up. Révélez vos talents cachés.</p>
-                    <p>📍 Amphithéâtre | 📅 5 Novembre</p>
-                    <button class="btn-primary" data-event-name="Nuit du Talent">S'inscrire</button>
-                </div>
+        <article class="card" aria-labelledby="ev2">
+          <div class="card-media">
+            <img src="assets/IMG_9720.jpg" alt="Soirée de Bienvenue" />
+            <div class="badge-top pale">Soirée</div>
+            <div class="price-bubble purple">15€</div>
+          </div>
+          <div class="card-body">
+            <h3 id="ev2">Soirée de Bienvenue BDE</h3>
+            <p class="meta-desc">Soirée festive avec DJ, buffet et animations pour célébrer la rentrée.</p>
+
+            <ul class="meta-list">
+              <li class="meta-item"><span class="icon cal" aria-hidden>📅</span> 15 Sept</li>
+              <li class="meta-item"><span class="icon clock" aria-hidden>⏰</span> 19h00 - 02h00</li>
+              <li class="meta-item"><span class="icon loc" aria-hidden>📍</span> Salle des Fêtes</li>
+              <li class="meta-item"><span class="icon people" aria-hidden>👥</span> 150 participants</li>
+            </ul>
+
+            <div class="actions">
+              <button class="btn btn-muted" disabled>Bientôt disponible</button>
             </div>
-        </div>
-    </section>
 
-    <section id="contact">
-        <div class="container">
-            <h2 class="section-title">Contactez le BDE</h2>
-            <form id="contactForm" class="contact-form">
-                <label for="name">Nom & Prénom</label>
-                <input type="text" id="name" name="name" required>
+            <a class="link-profile" href="#">Voir le profil LinkedIn</a>
+          </div>
+        </article>
 
-                <label for="email">Email EMSI</label>
-                <input type="email" id="email" name="email" required>
+        <article class="card" aria-labelledby="ev3">
+          <div class="card-media">
+            <img src="assets/IMG_9721.jpg" alt="Workshop Tech" />
+            <div class="badge-top">Atelier</div>
+            <div class="price-bubble green">10€</div>
+          </div>
+          <div class="card-body">
+            <h3 id="ev3">Workshop Tech</h3>
+            <p class="meta-desc">Ateliers pratiques sur les technologies émergentes et l'innovation.</p>
 
-                <label for="message">Votre Message / Question</label>
-                <textarea id="message" name="message" required></textarea>
+            <ul class="meta-list">
+              <li class="meta-item"><span class="icon cal" aria-hidden>📅</span> 22 Sept</li>
+              <li class="meta-item"><span class="icon clock" aria-hidden>⏰</span> 14h00 - 17h00</li>
+              <li class="meta-item"><span class="icon loc" aria-hidden>📍</span> Labo Informatique</li>
+              <li class="meta-item"><span class="icon people" aria-hidden>👥</span> 30 participants</li>
+            </ul>
 
-                <button type="submit" class="btn-send">Envoyer le Message</button>
-            </form>
-            <div class="contact-info">
-                 <p>📍 Adresse : 1, Avenue Al Majd, Hay Riad, Rabat</p>
-                 <p>📧 Email de réception : contact.bde.emsi@gmail.com</p>
+            <div class="actions">
+              <button class="btn btn-primary">S'inscrire maintenant</button>
             </div>
+
+            <a class="link-profile" href="#">Voir le profil LinkedIn</a>
+          </div>
+        </article>
+
+        <article class="card" aria-labelledby="ev4">
+          <div class="card-media">
+            <img src="assets/IMG_9720.jpg" alt="Tournoi Sportif" />
+            <div class="badge-top">Compétition</div>
+            <div class="price-bubble orange">5€</div>
+          </div>
+          <div class="card-body">
+            <h3 id="ev4">Tournoi Sportif</h3>
+            <p class="meta-desc">Compétitions sportives inter-promotions avec récompenses.</p>
+
+            <ul class="meta-list">
+              <li class="meta-item"><span class="icon cal" aria-hidden>📅</span> 29 Sept</li>
+              <li class="meta-item"><span class="icon clock" aria-hidden>⏰</span> 10h00 - 16h00</li>
+              <li class="meta-item"><span class="icon loc" aria-hidden>📍</span> Terrain de Sport</li>
+              <li class="meta-item"><span class="icon people" aria-hidden>👥</span> 100 participants</li>
+            </ul>
+
+            <div class="actions">
+              <button class="btn btn-hero" style="background:linear-gradient(90deg,#ff7a00,#ff4d4d);color:#fff">S'inscrire maintenant</button>
+            </div>
+
+            <a class="link-profile" href="#">Voir le profil LinkedIn</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="info" class="section" style="background:transparent;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Informations importantes</h2>
+        <p class="subtitle">Toutes les dates clés à retenir pour bien démarrer votre année</p>
+      </div>
+
+      <div class="important-grid">
+        <article class="important-card" aria-labelledby="info1">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden>📅</span>
+            <span class="pill urgent">Urgent</span>
+          </div>
+          <div class="card-body">
+            <div class="card-date">2 Septembre 2025</div>
+            <h4 id="info1">Jour de rentrée</h4>
+            <p class="muted">Jour de rentrée</p>
+          </div>
+        </article>
+
+        <article class="important-card" aria-labelledby="info2">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden>👥</span>
+            <span class="pill event">Événement</span>
+          </div>
+          <div class="card-body">
+            <div class="card-date">3–4 Septembre</div>
+            <h4 id="info2">Journées d'intégration</h4>
+            <p class="muted">Rencontres, activités et ateliers pour débuter.</p>
+          </div>
+        </article>
+
+        <article class="important-card" aria-labelledby="info3">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden>⏰</span>
+            <span class="pill info">Info</span>
+          </div>
+          <div class="card-body">
+            <div class="card-date">9 Septembre</div>
+            <h4 id="info3">Début des cours</h4>
+            <p class="muted">Assurez-vous d'avoir tout le matériel nécessaire.</p>
+          </div>
+        </article>
+
+        <article class="important-card" aria-labelledby="info4">
+          <div class="card-top">
+            <span class="card-icon" aria-hidden>📍</span>
+            <span class="pill event">Événement</span>
+          </div>
+          <div class="card-body">
+            <div class="card-date">15 Septembre</div>
+            <h4 id="info4">Soirée de bienvenue BDE</h4>
+            <p class="muted">Soirée officielle du BDE — réservez votre place.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>L’équipe BDE 2026</h2>
+        <p class="subtitle">Une équipe passionnée pour votre année étudiante</p>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxx</h4>
+          <p>Président — Génie Informatique, 5ème année</p>
         </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 BDE EMSI Rabat. Tous droits réservés.</p>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxx</h4>
+          <p>Vice-Présidente — Génie Logiciel, 4ème année</p>
         </div>
-    </footer>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxx</h4>
+          <p>Responsable Événementiel — SI, 4ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxx</h4>
+          <p>Responsable Communication — Réseaux, 3ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxx</h4>
+          <p>Trésorier — IS, 5ème année</p>
+        </div>
 
-    <script>
-        // *****************************************************************
-        // *** CONFIGURATION : API URL ***
-        // *** IMPORTANT : LORS DU DÉPLOIEMENT EN LIGNE (RENDER, HEROKU), 
-        // *** REMPLACEZ 'http://localhost:3000' PAR L'URL DE VOTRE SERVEUR !
-        // *****************************************************************
-        const API_URL = 'http://localhost:3000/api'; 
-        // Exemple de déploiement : const API_URL = 'https://mon-serveur-bde.onrender.com/api';
-        // ---------------------------------------------------------------------------------
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxxx</h4>
+          <p>Responsable Partenariats — Génie Logiciel, 4ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxx</h4>
+          <p>Responsable Logistique — SI, 5ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxxx</h4>
+          <p>Responsable Culture — Réseaux, 3ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxxx</h4>
+          <p>Responsable Sport — IS, 4ème année</p>
+        </div>
+        <div class="team-card">
+          <img src="assets/avatar1.svg" alt="Nom membre" />
+          <h4>xxxxxxxxxxxx</h4>
+          <p>Responsable Social — Génie Informatique, 3ème année</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contact</h2>
+        <p class="subtitle">Écrivez-nous pour toute question ou suggestion</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:20px">
+        <form id="contactForm" class="form" aria-label="Formulaire de contact">
+          <div class="row" style="margin-bottom:8px">
+            <input class="input" name="name" placeholder="Nom" required />
+            <input class="input" name="email" placeholder="Email" type="email" required />
+          </div>
+          <div style="margin-bottom:8px">
+            <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn-send">Envoyer</button>
+          </div>
+        </form>
+
+        <aside>
+          <div class="form" style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+            <strong>Réseaux sociaux</strong>
+            <div style="display:flex;gap:10px">
+              <a href="#" aria-label="Facebook"><img src="assets/placeholder1.svg" alt="facebook" style="width:36px;height:36px"></a>
+              <a href="#" aria-label="Instagram"><img src="assets/placeholder1.svg" alt="instagram" style="width:36px;height:36px"></a>
+              <a href="#" aria-label="LinkedIn"><img src="assets/placeholder1.svg" alt="linkedin" style="width:36px;height:36px"></a>
+            </div>
+
+            <div style="margin-top:8px;color:#666">Adresse: Campus EMSI Rabat<br/>Email: contact@bde-emsi.ma<br/>Tel: +212 6 00 00 00 00</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div>© 2025 BDE EMSI Rabat – Tous droits réservés</div>
+    </div>
+  </footer>
+
+  <div id="authForm" style="display:none;">
+    <h3 id="formTitle">Se connecter</h3>
+    <p id="authMessage" style="color:red;margin-bottom:10px;"></p>
+    <input id="email" type="email" placeholder="Email" required>
+    <input id="password" type="password" placeholder="Mot de passe" required>
+    <button id="submitAuth" class="btn-hero">Valider</button>
+    <button onclick="document.getElementById('authForm').style.display='none'" class="btn-muted">Annuler</button>
+  </div>
 
 
-        // Fonction utilitaire pour le défilement fluide
-        document.querySelectorAll('a[data-scroll]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({ behavior: 'smooth' });
-                // Fermer le menu mobile après le clic
-                if (window.innerWidth <= 768) {
-                    document.querySelector('.nav').classList.remove('nav-open');
-                }
-            });
-        });
+  <script>
+    // Simuler l'état utilisateur
+    let loggedIn = false;
 
-        // ---------------------------------------------
-        // ## 1. Gestion du Menu Mobile
-        // ---------------------------------------------
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.querySelector('.nav');
+    const loginBtn = document.getElementById('btn-login');
+    const registerBtn = document.getElementById('btn-register');
+    const logoutBtn = document.getElementById('btn-logout');
+    const authForm = document.getElementById('authForm');
+    const formTitle = document.getElementById('formTitle');
+    const submitAuth = document.getElementById('submitAuth');
+    const authMessage = document.getElementById('authMessage');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
 
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('nav-open');
-        });
+function updateUI() {
+    if(loggedIn){
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+    } else {
+        loginBtn.style.display = 'inline-block';
+        registerBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+    }
+    authForm.style.display = 'none'; // Cacher le formulaire après la connexion/déconnexion
+}
 
-        // ---------------------------------------------
-        // ## 2. Animation des Compteurs
-        // ---------------------------------------------
-        function animateCounter(element, target) {
-            let count = 0;
-            const step = target / 100; 
-            const increment = Math.ceil(step);
-            
-            const timer = setInterval(() => {
-                count += increment;
-                if (count >= target) {
-                    count = target;
-                    clearInterval(timer);
-                }
-                element.textContent = count.toLocaleString('fr-FR'); 
-            }, 10);
+function handleAuth(type) {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if(!email || !password){
+    if(!email || !password){
+        authMessage.textContent = "Veuillez remplir tous les champs.";
+        return;
+    }
+
+    if(type === 'register') {
+        const confirmPassword = confirmPasswordInput.value.trim();
+        if(!confirmPassword) {
+            authMessage.textContent = "Veuillez confirmer le mot de passe.";
+            return;
         }
-
-        const counters = document.querySelectorAll('.counter .num');
-        
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const counterElement = entry.target;
-                    const target = parseInt(counterElement.getAttribute('data-target'));
-                    animateCounter(counterElement, target);
-                    observer.unobserve(counterElement); 
-                }
-            });
-        }, {
-            threshold: 0.8 
-        });
-
-        counters.forEach(counter => {
-            observer.observe(counter);
-        });
-
-        // ---------------------------------------------
-        // ## 3. Soumission du Formulaire de Contact
-        // ---------------------------------------------
-        const contactForm = document.getElementById('contactForm');
-        
-        if (contactForm) {
-            contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData.entries());
-                
-                const btnSend = contactForm.querySelector('.btn-send');
-                const originalText = btnSend.textContent;
-                
-                btnSend.textContent = 'Envoi en cours...';
-                btnSend.disabled = true;
-
-                try {
-                    const response = await fetch(`${API_URL}/contact`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
-
-                    const result = await response.json();
-                    
-                    if (response.ok) {
-                        alert(`✅ Succès: ${result.message}`);
-                        contactForm.reset();
-                    } else {
-                        alert(`❌ Erreur: ${result.message || 'Problème de communication avec le serveur.'}`);
-                    }
-
-                } catch (error) {
-                    console.error('Erreur de connexion au serveur :', error);
-                    alert('❌ Erreur de connexion: Assurez-vous que le serveur backend Node.js est en cours d\'exécution sur http://localhost:3000.');
-                } finally {
-                    btnSend.textContent = originalText;
-                    btnSend.disabled = false;
-                }
-            });
+        if(password !== confirmPassword) {
+            authMessage.textContent = "Les mots de passe ne correspondent pas.";
+            return;
         }
+        alert(`Inscription réussie pour ${email} (simulation)`);
+    } else {
+        alert(`Connexion réussie pour ${email} (simulation)`);
+    }
 
-        // ---------------------------------------------
-        // ## 4. Inscription aux Événements
-        // ---------------------------------------------
-        document.querySelectorAll('#events .cards-grid .btn-primary').forEach(button => {
-            button.addEventListener('click', async (e) => {
-                
-                e.preventDefault(); 
-                
-                const eventName = e.target.getAttribute('data-event-name');
-                
-                const studentName = prompt(`Inscription à l'événement "${eventName}" :\nVeuillez entrer votre Nom et Prénom :`);
-                if (!studentName) return; 
+    loggedIn = true;
+    updateUI();
+    emailInput.value = '';
+    passwordInput.value = '';
+    if(confirmPasswordInput) confirmPasswordInput.value = '';
+}
 
-                const studentEmail = prompt(`Veuillez entrer votre Email EMSI :`);
-                if (!studentEmail) return;
+function showForm(type) {
+    authForm.style.display = 'block';
+    formTitle.textContent = type === 'login' ? 'Se connecter' : "S'inscrire";
+    authMessage.textContent = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+    if(confirmPasswordInput) confirmPasswordInput.value = '';
+    
+    // Montrer ou cacher le champ confirmPassword selon le type
+    if(type === 'register') {
+        confirmPasswordInput.parentElement.style.display = 'block';
+    } else {
+        confirmPasswordInput.parentElement.style.display = 'none';
+    }
 
-                const data = {
-                    eventName,
-                    studentName,
-                    studentEmail
-                };
+    submitAuth.onclick = () => handleAuth(type);
+}
 
-                const originalText = button.textContent;
-                button.textContent = 'Inscription...';
-                button.disabled = true;
-                
-                try {
-                    const response = await fetch(`${API_URL}/inscription`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
+loginBtn.onclick = () => showForm('login');
+registerBtn.onclick = () => showForm('register');
+logoutBtn.onclick = () => {
+    loggedIn = false;
+    alert('Déconnexion réussie (simulation)');
+    updateUI();
+}
 
-                    const result = await response.json();
-                    
-                    if (response.ok) {
-                        alert(`🥳 ${result.message}\nVérifiez la console du serveur pour l'enregistrement.`);
-                    } else {
-                        alert(`❌ Erreur d'inscription: ${result.message || 'Un problème est survenu lors de l\'inscription.'}`);
-                    }
 
-                } catch (error) {
-                    console.error('Erreur de connexion lors de l\'inscription:', error);
-                    alert('❌ Erreur de connexion: Le serveur d\'inscription est indisponible.');
-                } finally {
-                    button.textContent = originalText;
-                    button.disabled = false;
-                }
-            });
+
+    document.addEventListener('DOMContentLoaded', function(){
+      const headerHeight = () => document.querySelector('.header').offsetHeight || 64;
+
+      document.querySelectorAll('a[data-scroll]').forEach(a=>{
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          const id = this.getAttribute('href');
+          const target = document.querySelector(id);
+          if(!target) return;
+          const top = target.getBoundingClientRect().top + window.scrollY - headerHeight() - 12;
+          window.scrollTo({top, behavior:'smooth'});
         });
-    </script>
+      });
+
+      const navToggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.nav');
+      if(navToggle){
+        navToggle.addEventListener('click', ()=>{
+          nav.classList.toggle('open');
+          if(nav.classList.contains('open')){
+            nav.style.display='flex';
+            nav.style.flexDirection='column';
+            nav.style.position='absolute';
+            nav.style.right='16px';
+            nav.style.top='64px';
+            nav.style.background='white';
+            nav.style.padding='12px';
+            nav.style.borderRadius='8px';
+            nav.style.boxShadow = '0 6px 18px rgba(0,0,0,0.1)';
+          } else {
+            nav.style.display='none';
+            // Revert to original display style for desktop view
+            setTimeout(() => {
+                if (window.innerWidth > 768) {
+                    nav.style.display = 'flex';
+                    nav.style.flexDirection = 'row';
+                    nav.style.position = 'static';
+                    nav.style.background = 'transparent';
+                    nav.style.padding = '0';
+                    nav.style.boxShadow = 'none';
+                }
+            }, 50);
+
+          }
+        });
+      }
+
+      // Handle resize to fix mobile menu display on desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            nav.style.display = 'flex';
+            nav.style.flexDirection = 'row';
+            nav.style.position = 'static';
+            nav.style.background = 'transparent';
+            nav.style.padding = '0';
+            nav.style.boxShadow = 'none';
+            nav.classList.remove('open');
+        } else if (!nav.classList.contains('open')) {
+            nav.style.display = 'none';
+        }
+      });
+
+      const counters = document.querySelectorAll('.counter .num');
+      const animateCounter = (el, to) =>{
+        const duration = 1600;
+        const start = 0;
+        const startTime = performance.now();
+        const step = (now)=>{
+          const progress = Math.min((now - startTime)/duration, 1);
+          // Easing function (easeOutQuad)
+          const easeOutProgress = progress * (2 - progress);
+          const value = Math.floor(easeOutProgress * (to - start) + start);
+          el.textContent = value.toLocaleString();
+          if(progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      let countersAnimated = false;
+      const obs = new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting && !countersAnimated){
+            countersAnimated = true;
+            document.querySelectorAll('.counter .num').forEach(el=>{
+              const t = parseInt(el.getAttribute('data-target'),10) || 0;
+              animateCounter(el,t);
+            });
+          }
+        })
+      }, {threshold:0.4});
+
+      const countersSection = document.querySelector('.counters');
+      if(countersSection) obs.observe(countersSection);
+
+      const form = document.querySelector('#contactForm');
+      if(form){
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          const name = form.querySelector('[name=name]').value.trim();
+          const email = form.querySelector('[name=email]').value.trim();
+          const message = form.querySelector('[name=message]').value.trim();
+          if(!name || !email || !message){
+            alert('Veuillez remplir tous les champs.');
+            return;
+          }
+          const sendBtn = form.querySelector('.btn-send');
+          const originalText = sendBtn.textContent;
+          sendBtn.textContent = 'Envoi...';
+          setTimeout(()=>{
+            sendBtn.textContent = originalText;
+            alert('Merci, votre message a été envoyé .');
+            form.reset();
+          }, 900);
+        })
+      }
+
+      updateUI(); // Initial UI setup
+    });
+  </script>
 </body>
 </html>
+
+
 

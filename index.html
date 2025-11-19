@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDE EMSI Rabat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Définition des variables CSS et des styles de base */
+        :root {
+            --green: #007b43;
+            --green-light: #00a651;
+            --gray-light: #f5f7fa;
+            --gray-dark: #2c2c2c;
+            --white: #ffffff;
+            --transition: 200ms ease;
+            --max-width: 1200px;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%; margin:0; font-family:'Poppins',sans-serif; background:var(--gray-light); color:var(--gray-dark);}
+        .container{width:calc(100% - 32px); max-width:var(--max-width); margin:0 auto;}
+        
+        /* Header */
+        .header{position:fixed; top:0; left:0; right:0; height:64px; background:rgba(255,255,255,0.96); border-bottom:1px solid rgba(0,0,0,0.06); display:flex; align-items:center; z-index:1000; box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+        .header .container{display:flex; align-items:center; justify-content:space-between;}
+        .logo img{height:42px;}
+        
+        /* Hero Section */
+        .hero{min-height:100vh; display:flex; align-items:center; position:relative; padding-top:64px; color:white;}
+        .hero .bg{position:absolute; inset:0; background:url('https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp') center/cover; z-index:-1;}
+        .hero::before{content:""; position:absolute; inset:0; background:rgba(0,0,0,0.55);}
+        .hero-inner{position:relative; padding:70px 12px;}
+        .hero h1{font-size:clamp(28px,4vw,50px); margin:0 0 12px;}
+        .hero p.lead{max-width:850px; font-size:1.1rem; color:rgba(255,255,255,0.9);}
+        .counters{display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:14px; margin-top:20px;}
+        .counter{background:rgba(255,255,255,0.07); padding:12px; border-radius:12px; text-align:center;}
+        .counter .num{font-size:1.3rem; font-weight:700;}
+        
+        /* Sections générales */
+        .section{padding:70px 0;}
+        .section-header{text-align:center;margin-bottom:24px;}
+        .section-header h2{margin:0;font-size:1.8rem;}
+        
+        /* Cartes (Events) */
+        .cards-grid{display:grid; gap:18px;}
+        @media(min-width:768px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(min-width:1024px){.cards-grid{grid-template-columns:repeat(4,1fr)}}
+        .card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.07);display:flex;flex-direction:column;}
+        .card img{width:100%;height:165px;object-fit:cover;}
+        .card-body{padding:14px;display:flex;flex-direction:column;gap:8px;}
+        
+        /* Boutons */
+        .btn{padding:8px 10px;border:none;border-radius:8px;cursor:pointer;}
+        .btn-primary{background:var(--green);color:white;}
+        .btn-muted{background:#eaeef1;color:#444;}
+        
+        /* Footer */
+        .footer{text-align:center;padding:28px 0;color:#666;}
+        
+        /* Formulaire */
+        form input, form textarea{width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid #ccc; font-family:'Poppins',sans-serif;}
+        form button[type="submit"] {background:var(--green); color:white; padding:10px 14px; border:none; border-radius:6px; cursor:pointer;}
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="logo"><img src="assets/logo-bde.png" alt="BDE EMSI Rabat"></div> 
+        <nav>
+            <a href="#events" style="text-decoration:none; color:var(--gray-dark); margin-left:15px; font-weight:500;">Événements</a>
+            <a href="#contact" style="text-decoration:none; color:var(--gray-dark); margin-left:15px; font-weight:500;">Contact</a>
+        </nav>
+    </div>
+</header>
+
+<section id="hero" class="hero">
+    <div class="bg"></div>
+    <div class="container hero-inner">
+        <h1>Bienvenue au Bureau des Étudiants <span style="color:#00a651;display:block">EMSI Rabat</span></h1>
+        <p class="lead">Une nouvelle année commence ! Découvrez tous les événements et activités organisés par votre BDE.</p>
+        <div class="counters">
+            <div class="counter"><div class="num">14500</div><div>Étudiants</div></div>
+            <div class="counter"><div class="num">20</div><div>Événements</div></div>
+            <div class="counter"><div class="num">10</div><div>Associations</div></div>
+            <div class="counter"><div class="num">39</div><div>Ans d’excellence</div></div>
+            <div class="counter"><div class="num">5</div><div>Villes</div></div>
+            <div class="counter"><div class="num">20000</div><div>Lauréats</div></div>
+        </div>
+    </div>
+</section>
+
+<section id="events" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Événements à venir</h2>
+        </div>
+        <div class="cards-grid">
+            <article class="card">
+                <img src="https://via.placeholder.com/400x165/007b43/ffffff?text=Integration+Day" alt="Journée d'Intégration">
+                <div class="card-body">
+                    <h3>Journée d'Intégration</h3>
+                    <p>Découvrez l'école et créez des liens avec vos camarades.</p>
+                    <button class="btn btn-primary" onclick="registerEvent('Journée d\'Intégration')">S'inscrire maintenant</button>
+                </div>
+            </article>
+            <article class="card">
+                <img src="https://via.placeholder.com/400x165/00a651/ffffff?text=Welcome+Party" alt="Soirée de Bienvenue BDE">
+                <div class="card-body">
+                    <h3>Soirée de Bienvenue BDE</h3>
+                    <p>Soirée festive avec DJ, buffet et animations pour célébrer la rentrée.</p>
+                    <button class="btn btn-primary" onclick="registerEvent('Soirée de Bienvenue')">S'inscrire maintenant</button>
+                </div>
+            </article>
+            </div>
+    </div>
+</section>
+
+<section id="contact" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Contactez-nous</h2>
+        </div>
+        <form id="contactForm"> 
+            <input name="name" placeholder="Nom" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+</section>
+
+<footer class="footer">
+    © 2025 — BDE EMSI Rabat
+</footer>
+
+<script>
+    // La fonction registerEvent utilise fetch et les prompts pour collecter les infos
+    async function registerEvent(eventName){
+        const name = prompt("Votre nom ?");
+        const email = prompt("Votre email ?");
+        if(!name || !email) return alert("❌ Informations manquantes.");
+
+        try {
+            // NOTE : L'URL "http://localhost:3000/register" est typiquement pour le développement local.
+            // Vous devrez la remplacer par l'URL de votre serveur de production.
+            const res = await fetch("http://localhost:3000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, eventName })
+            });
+            const data = await res.json();
+            if(data.success){
+                alert(`✅ Inscription à "${eventName}" réussie !`);
+            } else {
+                alert(`❌ Erreur lors de l'inscription : ${data.message || 'Problème serveur.'}`);
+            }
+        } catch(err) {
+            console.error("Erreur d'inscription:", err);
+            alert("❌ Impossible de contacter le serveur (register).");
+        }
+    }
+
+    // Gestion de l'envoi du formulaire de contact (méthode de préférence)
+    const contactForm = document.getElementById("contactForm");
+
+    contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // Collecte des données du formulaire
+        const formData = new FormData(contactForm);
+        const data = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            message: formData.get("message")
+        };
+
+        try {
+            // NOTE : L'URL est "/contact" ici, vous devez vous assurer qu'elle est correcte sur votre serveur.
+            // Si votre serveur est sur un autre domaine/port, utilisez l'URL complète (ex: http://localhost:3000/contact)
+            const response = await fetch("/contact", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            
+            // Vérifie si la réponse HTTP est OK (statut 200-299)
+            if (!response.ok) {
+                // Tente de lire le corps de la réponse pour un message d'erreur spécifique
+                const errorData = await response.json().catch(() => ({ message: `Erreur HTTP ${response.status}` }));
+                throw new Error(errorData.message || `Erreur lors de l'envoi, statut : ${response.status}`);
+            }
+
+            const result = await response.json();
+            alert(`✅ Message envoyé : ${result.message || 'Succès !'}`);
+            contactForm.reset();
+
+        } catch(error) {
+            console.error("Erreur lors de l'envoi du formulaire:", error);
+            alert(`❌ Échec de l'envoi : ${error.message}`);
+        }
+    });
+
+</script>
+
+</body>
+</html>

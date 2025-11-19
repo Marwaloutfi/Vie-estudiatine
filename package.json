@@ -1,0 +1,17 @@
+{
+  "name": "bde-emsi-app",
+  "version": "1.0.0",
+  "description": "BDE EMSI contact and registration system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "nodemailer": "^6.10.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,235 +1,249 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BDE EMSI Rabat</title>
-<meta name="description" content="BDE EMSI Rabat — événements, informations et contact">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --green:#007b43;
-  --green-light:#00a651;
-  --gray-light:#f5f7fa;
-  --gray-dark:#2c2c2c;
-  --white:#ffffff;
-  --transition:200ms ease;
-  --max-width:1200px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Poppins', sans-serif;background:var(--gray-light);color:var(--gray-dark);}
-.container{width:calc(100% - 32px);max-width:var(--max-width);margin:0 auto;}
-.header{position:fixed;top:0;left:0;right:0;height:64px;background:linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));border-bottom:1px solid rgba(44,44,44,0.04);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-shadow:0 2px 8px rgba(15,15,15,0.04);}
-.logo img{height:40px;}
-.nav{display:flex;gap:18px;align-items:center;}
-.nav a{color:var(--gray-dark);text-decoration:none;font-weight:500;padding:8px 10px;border-radius:8px;transition:background var(--transition);}
-.nav a:hover{background:rgba(0,0,0,0.04);}
-.btn-logout,.btn-login,.btn-register{background:var(--green);color:var(--white);padding:8px 14px;border-radius:8px;border:none;cursor:pointer;}
-.nav-toggle{display:none;}
-@media(max-width:768px){.nav{display:none;flex-direction:column;position:absolute;top:64px;right:16px;background:white;padding:12px;border-radius:8px;}.nav-toggle{display:block;}}
-.hero{min-height:100vh;display:flex;align-items:center;color:var(--white);position:relative;padding-top:64px;}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.6) 100%);z-index:0;}
-.hero .bg{position:absolute;inset:0;background-image:url('https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp');background-size:cover;background-position:center;z-index:-1;}
-.hero-inner{position:relative;z-index:1;padding:80px 16px;text-align:center;}
-.hero h1{font-size:clamp(28px,4vw,46px);margin-bottom:16px;}
-.hero p{font-size:1.05rem;margin-bottom:24px;color:rgba(255,255,255,0.95);}
-.hero-icons{display:flex;gap:24px;justify-content:center;margin-top:24px;}
-.hero-icons a{width:50px;height:50px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:24px;text-decoration:none;transition:background var(--transition);}
-.hero-icons a:hover{background:rgba(255,255,255,0.5);}
-.hero-buttons{margin-top:24px;display:flex;gap:12px;justify-content:center;}
-.counters{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:40px;max-width:980px;margin-left:auto;margin-right:auto;}
-.counter{background:rgba(255,255,255,0.06);padding:12px 14px;border-radius:10px;text-align:center;}
-.counter .num{font-weight:700;font-size:1.2rem;}
-.counter .label{font-size:0.85rem;color:rgba(255,255,255,0.85);}
-.section{padding:64px 0;}
-.section-header{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;align-items:center;text-align:center;}
-.section h2{font-size:1.6rem;margin-bottom:4px;}
-.section p.subtitle{color:#556;}
-.cards-grid{display:grid;gap:18px;}
-@media(max-width:767px){.cards-grid{grid-template-columns:1fr;}}
-@media(min-width:768px) and (max-width:1023px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
-@media(min-width:1024px){.cards-grid{grid-template-columns:repeat(4,1fr);}}
-.card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(15,15,15,0.06);display:flex;flex-direction:column;}
-.card img{width:100%;height:160px;object-fit:cover;}
-.card-body{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1;}
-.badge-top{position:absolute;left:12px;top:12px;background:var(--white);color:var(--gray-dark);padding:8px 12px;border-radius:999px;font-weight:700;font-size:0.85rem;box-shadow:0 6px 18px rgba(15,15,15,0.08);}
-.price-bubble{position:absolute;right:12px;top:12px;padding:10px 12px;border-radius:999px;color:#fff;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,0.12);}
-.price-bubble.green{background:var(--green);}
-.price-bubble.purple{background:#9b59b6;}
-.price-bubble.orange{background:#ff9b28;}
-.actions{margin-top:12px;}
-.link-profile{display:inline-block;margin-top:12px;color:#1976d2;text-decoration:none;font-weight:600;}
-.link-profile:hover{text-decoration:underline;}
-.team-grid{display:grid;gap:16px;}
-@media(max-width:767px){.team-grid{grid-template-columns:1fr;}}
-@media(min-width:768px) and (max-width:1023px){.team-grid{grid-template-columns:repeat(2,1fr);}}
-@media(min-width:1024px){.team-grid{grid-template-columns:repeat(5,1fr);}}
-.team-card{background:var(--white);padding:12px;border-radius:10px;text-align:center;box-shadow:0 6px 18px rgba(15,15,15,0.04);}
-.team-card img{width:88px;height:88px;border-radius:50%;object-fit:cover;margin:0 auto 10px;}
-.team-card h4{margin-bottom:6px;}
-.team-card p{color:#555;}
-.form{background:var(--white);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(15,15,15,0.04);}
-.form .row{display:flex;gap:8px;}
-@media(max-width:767px){.form .row{flex-direction:column;}}
-.input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9eb;}
-.btn-send{background:var(--green-light);color:var(--white);border:none;padding:10px 14px;border-radius:8px;cursor:pointer;}
-.footer{padding:28px 0;text-align:center;color:#666;}
-html{scroll-behavior:smooth;}
-.card:hover,.team-card:hover{transform:translateY(-6px);transition:transform var(--transition);}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BDE EMSI Rabat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --green:#00a651;
+      --green-dark:#007b43;
+      --gray-dark:#222;
+      --gray-light:#f6f6f8;
+      --white:#fff;
+      --transition:0.25s ease;
+      --radius:14px;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--gray-light);
+      color:var(--gray-dark);
+      scroll-behavior:smooth;
+    }
+    .container{
+      width:calc(100% - 40px);
+      max-width:1200px;
+      margin:auto;
+    }
+
+    /* HEADER */
+    header{
+      position:fixed;top:0;left:0;right:0;height:70px;
+      background:rgba(255,255,255,0.97);
+      box-shadow:0 4px 12px rgba(0,0,0,0.04);
+      z-index:999;display:flex;align-items:center;
+    }
+    header .container{display:flex;align-items:center;justify-content:space-between;}
+    .logo img{height:44px;}
+    nav{display:flex;gap:22px;align-items:center;}
+    nav a{text-decoration:none;color:var(--gray-dark);font-weight:500;}
+    nav a:hover{color:var(--green);}
+
+    .btn{
+      padding:9px 15px;
+      border-radius:8px;
+      border:none;
+      font-weight:600;
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .btn-login{background:var(--green-dark);color:white;}
+    .btn-login:hover{background:#008f4f;}
+    .btn-signup{background:#1976d2;color:white;}
+    .btn-signup:hover{background:#1259a2;}
+
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding-top:80px;
+      position:relative;
+      text-align:center;
+      color:white;
+    }
+    .hero .bg{
+      position:absolute;inset:0;
+      background:url("https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp") center/cover no-repeat;
+      z-index:-2;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:0;
+      background:rgba(0,0,0,0.55);
+      z-index:-1;
+    }
+    .hero h1{
+      font-size:clamp(32px,4vw,58px);
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .hero p{
+      font-size:1.15rem;
+      max-width:850px;
+      margin:auto;
+      margin-bottom:26px;
+      opacity:0.96;
+    }
+    .hero-icons{
+      display:flex;justify-content:center;gap:22px;margin-top:18px;
+    }
+    .hero-icons a{
+      font-size:33px;
+      color:white;
+      text-decoration:none;
+      transition:var(--transition);
+      display:flex;
+      align-items:center;
+    }
+    .hero-icons a:hover{
+      color:var(--green);
+      transform:scale(1.15);
+    }
+
+    /* SECTION TEMPLATE */
+    .section{
+      padding:70px 0;
+    }
+    .section-title{
+      text-align:center;
+      margin-bottom:35px;
+    }
+    .section-title h2{font-size:1.9rem;margin-bottom:6px;}
+    .section-title p{color:#666;font-size:1.05rem;}
+
+    /* INFO CARDS */
+    .info-grid{
+      display:grid;
+      gap:22px;
+    }
+    @media(min-width:800px){
+      .info-grid{grid-template-columns:repeat(3,1fr);}
+    }
+    .info-card{
+      background:white;
+      border-radius:var(--radius);
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.07);
+      transition:var(--transition);
+    }
+    .info-card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 12px 32px rgba(0,0,0,0.10);
+    }
+    .info-card h3{font-size:1.35rem; font-weight:700;}
+    .info-card p{color:#555;line-height:1.55;}
+    .info-card a{
+      margin-top:auto;
+      color:var(--green-dark);
+      font-weight:600;
+      text-decoration:none;
+      transition:var(--transition);
+    }
+    .info-card a:hover{
+      color:var(--green);
+    }
+
+    /* FOOTER */
+    footer{
+      text-align:center;
+      padding:32px 0;
+      color:#555;
+      font-size:0.95rem;
+    }
+
+  </style>
 </head>
 <body>
-<header class="header">
-  <div class="logo"><img src="https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp" alt="Logo EMSI"></div>
-  <button class="nav-toggle">☰</button>
-  <nav class="nav">
-    <a href="#hero" data-scroll>Accueil</a>
-    <a href="#events" data-scroll>Événements</a>
-    <a href="#info" data-scroll>Infos</a>
-    <a href="#team" data-scroll>Équipe</a>
-    <a href="#contact" data-scroll>Contact</a>
-    <button class="btn-login">Se connecter</button>
-    <button class="btn-register">S'inscrire</button>
-  </nav>
-</header>
 
-<section id="hero" class="hero">
-  <div class="bg"></div>
-  <div class="hero-inner">
-    <h1>Bienvenue au Bureau des étudiants <span style="color:#00a651;">EMSI Rabat</span></h1>
-    <p>Une nouvelle année commence ! Découvrez tous les événements et activités organisés par votre BDE.</p>
-    <div class="hero-icons">
-      <a href="#" aria-label="Facebook">F</a>
-      <a href="#" aria-label="Instagram">I</a>
-      <a href="#" aria-label="LinkedIn">L</a>
-      <a href="#" aria-label="YouTube">Y</a>
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="assets/logo-bde.png" alt="Logo BDE">
+      </div>
+      <nav>
+        <a href="#hero">Accueil</a>
+        <a href="#info">Informations</a>
+        <a href="#events">Événements</a>
+        <a href="#team">Équipe</a>
+        <a href="#contact">Contact</a>
+        <button class="btn btn-login">Se connecter</button>
+        <button class="btn btn-signup">S'inscrire</button>
+      </nav>
     </div>
-    <div class="hero-buttons">
-      <button class="btn-login">Se connecter</button>
-      <button class="btn-register">S'inscrire</button>
-    </div>
-    <div class="counters">
-      <div class="counter"><div class="num" data-target="14500">0</div><div class="label">Étudiants</div></div>
-      <div class="counter"><div class="num" data-target="20">0</div><div class="label">Événements</div></div>
-      <div class="counter"><div class="num" data-target="10">0</div><div class="label">Associations</div></div>
-      <div class="counter"><div class="num" data-target="39">0</div><div class="label">Ans d’excellence</div></div>
-    </div>
-  </div>
-</section>
+  </header>
 
-<section id="events" class="section">
-  <div class="container">
-    <div class="section-header">
-      <h2>Événements à venir</h2>
-      <p class="subtitle">Découvrez les événements organisés par votre BDE</p>
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="bg"></div>
+    <div class="container">
+      <h1>Bureau des Étudiants EMSI Rabat</h1>
+      <p>Découvrez les activités, projets, événements et services dédiés aux étudiants EMSI pour une année universitaire dynamique, ambitieuse et inoubliable.</p>
+
+      <div class="hero-icons">
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">💼</a>
+        <a href="#">▶️</a>
+      </div>
     </div>
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-media">
-          <img src="https://emsi.ma/wp-content/uploads/2024/05/EMSI-recrutement.webp" alt="Événement">
-          <div class="badge-top">Phare</div>
-          <div class="price-bubble green">Gratuit</div>
+  </section>
+
+  <!-- INFO SECTION -->
+  <section id="info" class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Informations utiles</h2>
+        <p>Tout ce que vous devez savoir pour bien démarrer votre année universitaire</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>À propos du BDE</h3>
+          <p>Le Bureau des Étudiants représente les élèves, organise des événements, soutient les clubs et crée une communauté active pour améliorer l'expérience étudiante.</p>
+          <a href="#">En savoir plus →</a>
         </div>
-        <div class="card-body">
-          <h3>Journée d'intégration</h3>
-          <p class="meta-desc">Découvrez l'école et créez des liens durables.</p>
-          <div class="actions"><button class="btn btn-primary">S'inscrire</button></div>
-          <a class="link-profile" href="#">Voir le profil LinkedIn</a>
+
+        <div class="info-card">
+          <h3>Clubs & Associations</h3>
+          <p>Découvrez l’ensemble des clubs disponibles à l’EMSI Rabat et rejoignez celui qui correspond à vos talents et vos ambitions.</p>
+          <a href="#">Voir les clubs →</a>
+        </div>
+
+        <div class="info-card">
+          <h3>Articles & Blogs</h3>
+          <p>Restez informé(e) des actualités étudiantes, des témoignages, des conseils académiques et des projets innovants publiés par la communauté EMSI.</p>
+          <a href="#">Lire les articles →</a>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="team" class="section">
-  <div class="container">
-    <div class="section-header"><h2>L’équipe BDE 2026</h2></div>
-    <div class="team-grid">
-      <div class="team-card"><img src="https://via.placeholder.com/88" alt=""><h4>Président</h4><p>Génie Info 5ème année</p></div>
-      <div class="team-card"><img src="https://via.placeholder.com/88" alt=""><h4>Vice-Présidente</h4><p>Génie Logiciel 4ème année</p></div>
-    </div>
-  </div>
-</section>
+  <!-- FOOTER -->
+  <footer>
+    © 2025 BDE EMSI Rabat – Tous droits réservés
+  </footer>
 
-<section id="contact" class="section">
-  <div class="container">
-    <div class="section-header"><h2>Contact</h2></div>
-    <form id="contactForm" class="form">
-      <div class="row">
-        <input class="input" name="name" placeholder="Nom" required>
-        <input class="input" name="email" placeholder="Email" type="email" required>
-      </div>
-      <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
-      <button type="submit" class="btn-send">Envoyer</button>
-    </form>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container">© 2025 BDE EMSI Rabat – Tous droits réservés</div>
-</footer>
-
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  const headerHeight=()=>document.querySelector('.header').offsetHeight||64;
-  document.querySelectorAll('a[data-scroll]').forEach(a=>{
-    a.addEventListener('click',function(e){
-      e.preventDefault();
-      const id=this.getAttribute('href');
-      const target=document.querySelector(id);
-      if(!target)return;
-      const top=target.getBoundingClientRect().top+window.scrollY-headerHeight()-12;
-      window.scrollTo({top,behavior:'smooth'});
+  <script>
+    // Smooth scroll for nav links
+    document.querySelectorAll('nav a').forEach(link=>{
+      link.addEventListener('click',e=>{
+        const target=document.querySelector(link.getAttribute('href'));
+        if(target){
+          e.preventDefault();
+          window.scrollTo({top:target.offsetTop-60,behavior:"smooth"});
+        }
+      });
     });
-  });
-  const navToggle=document.querySelector('.nav-toggle');
-  const nav=document.querySelector('.nav');
-  if(navToggle){
-    navToggle.addEventListener('click',()=>{
-      nav.classList.toggle('open');
-      nav.style.display=nav.classList.contains('open')?'flex':'none';
-    });
-  }
-  const counters=document.querySelectorAll('.counter .num');
-  const animateCounter=(el,to)=>{
-    const duration=1600,start=0,startTime=performance.now();
-    const step=(now)=>{
-      const progress=Math.min((now-startTime)/duration,1);
-      const value=Math.floor(progress*(to-start)+start);
-      el.textContent=value.toLocaleString();
-      if(progress<1)requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-  let countersAnimated=false;
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting&&!countersAnimated){
-        countersAnimated=true;
-        counters.forEach(el=>animateCounter(el,parseInt(el.getAttribute('data-target'))||0));
-      }
-    });
-  },{threshold:0.4});
-  const countersSection=document.querySelector('.counters');
-  if(countersSection)obs.observe(countersSection);
+  </script>
 
-  const form=document.querySelector('#contactForm');
-  if(form){
-    form.addEventListener('submit',function(e){
-      e.preventDefault();
-      const name=form.querySelector('[name=name]').value.trim();
-      const email=form.querySelector('[name=email]').value.trim();
-      const message=form.querySelector('[name=message]').value.trim();
-      if(!name||!email||!message){alert('Veuillez remplir tous les champs.');return;}
-      form.querySelector('.btn-send').textContent='Envoi...';
-      setTimeout(()=>{
-        form.querySelector('.btn-send').textContent='Envoyer';
-        alert('Merci, votre message a été envoyé (simulation).');
-        form.reset();
-      },900);
-    });
-  }
-});
-</script>
 </body>
 </html>
